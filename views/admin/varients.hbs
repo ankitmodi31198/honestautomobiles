@@ -1,0 +1,94 @@
+  <!-- Sidebar -->
+   <div class="w3-sidebar w3-light-grey w3-bar-block" style="width:20%">
+        <h3 class="w3-bar-item">Menu</h3>
+         <a href="/admin" class="w3-bar-item w3-button">Dashboard</a>     
+        <a href="/admin/companies" class="w3-bar-item w3-button">Manages Cars</a>
+        {{!-- <a href="addstaff.jsp" class="w3-bar-item w3-button">Manages Staff</a>
+        <a href="changeallocation.jsp" class="w3-bar-item w3-button">Change Allocated Cars</a> --}}
+    </div>
+
+    <!-- Page Content -->
+    <div style="margin-left:20%">
+
+       <div class="my-new-header">
+            <button id="openNav" class="w3-button w3-xlarge my-hamburger-btn" onclick="w3_open()">&#9776;</button>
+            <span>
+                <a href="/admin" class="navbar-logo-link">JCMS</a> 
+            </span>
+            <div class="navbar-userpart">
+                <span class="navbar-userpart-username">Welcome, Admin | </span> <span><a href="">logout</a></span>
+            </div>
+        </div>
+        
+        <!-- breadcrumbs at top of the page -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li> 
+                <li class="breadcrumb-item"><a href="/admin/companies">Companies</a></li>
+                <li class="breadcrumb-item"><a href="/admin/models">Models</a></li>
+      			 <li class="breadcrumb-item" aria-current="page">Varients</li>
+            </ol>
+        </nav>    
+        
+        <form action="/admin/addVarient/{{model._id}}" method="post" class="my-form">
+            <div class="my-form-heading">
+                <h5>Add New Varient</h5>
+            </div>
+            <div class="container-95">                
+                <div class="row my-form-row">
+                    <h6>Enter New Varient</h6>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="model_varient_name">Varient</label>                                    
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="varient" id="model_varient_name">                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="my-submit-div">
+                    <input type="submit" name="submit" id="submit" class="btn btn-secondary btn-sm" value="Add">
+                </div>
+            </div>                                   
+        </form>
+                
+        <!-- dashboard -->
+        <div class="my-dashboard">
+            <div class="my-dashboard-header">
+                <center>
+                    <h4>Varients</h4>
+                </center>
+            </div>
+            
+            <div class="my-dashboard-content mt-3">
+                <div class="row">
+                	{{#each varients}}
+                        <div class="col-md-9">
+                            <!-- whole card is given as a link, so give href in the below anchor tag -->
+                            <a href="#" class="my-dashboard-box-link">
+                                <div class="my-dashboard-box">
+                                    <div class="my-dashboard-box-header">
+                                        <h6>{{this.name}} <i class="fa fa-car"></i></h6>
+                                    </div>
+                                    <div class="my-dashboard-box-content">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                        <center>
+                                        <div><a href="/admin/parts/{{this._id}}">Parts</a></div>
+                                            <div> <a href="/admin/services/{{this._id}}">Services</a></div>
+                                            <div><a href="/admin/lubricants/{{this._id}}" >Lubricants</a></div>   
+                                            </center>                                     
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+			        {{/each}}                                
+                </div>
+            </div>
+        </div>
+        
+
+    </div>

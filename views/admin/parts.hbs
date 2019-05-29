@@ -1,0 +1,178 @@
+ <div class="w3-sidebar w3-light-grey w3-bar-block" style="width:20%">
+        <h3 class="w3-bar-item">Menu</h3>
+         <a href="/admin" class="w3-bar-item w3-button">Dashboard</a>     
+        <a href="/admin/companies" class="w3-bar-item w3-button">Manages Cars</a>
+        {{!-- <a href="addstaff.jsp" class="w3-bar-item w3-button">Manages Staff</a>
+        <a href="changeallocation.jsp" class="w3-bar-item w3-button">Change Allocated Cars</a> --}}
+    </div>
+
+    <!-- Page Content -->
+    <div style="margin-left:20%">
+
+        <div class="my-new-header">
+            <button id="openNav" class="w3-button w3-xlarge my-hamburger-btn" onclick="w3_open()">&#9776;</button>
+            <span>
+                <a href="/admin" class="navbar-logo-link">JCMS</a> 
+            </span>
+            <div class="navbar-userpart">
+                <span class="navbar-userpart-username">Welcome, Admin | </span> <span><a href="">logout</a></span>
+            </div>
+        </div>
+        
+        <!-- breadcrumbs at top of the page -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/admin/companies">Companies</a></li>
+                <li class="breadcrumb-item"><a href="/admin/models">Models</a></li>
+                <li class="breadcrumb-item"><a href="/admin/varients">Varients</a></li>
+                <li class="breadcrumb-item" aria-current="page">Parts</li>
+            </ol>
+        </nav>    
+        
+        <form action="/admin/addPart/{{varient._id}}" method="post" class="my-form">
+            <div class="my-form-heading">
+                <h5>Add New Part</h5>
+            </div>
+            <div class="container-95">                
+                <div class="row my-form-row">
+                    <h6>Enter New Part</h6>
+                    <div class="col-md-1">
+                        <label for="part_name">Part</label>                                    
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" name="part" id="part_name">                                                        
+                    </div>
+                    <div class="col-md-1">
+                        <label for="part_price">Price</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" name="price" id="part_price">
+                    </div>
+                    <div class="col-md-1">
+                        <label for="part_quantity">Quantity</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="quantity" id="part_quantity" value="1">
+                    </div>
+                    <div class="col-md-1">
+                        <label for="part_labour">Labour</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="labour" id="part_labour" value="1">
+                    </div>
+                </div>
+                <div class="my-submit-div">
+                    <input type="submit" name="submit" id="submit" class="btn btn-secondary btn-sm" value="Add">
+                </div>
+            </div>                                   
+        </form>
+                
+        <!-- dashboard -->
+        <div class="my-dashboard">
+            <div class="my-dashboard-header">
+                <center>
+                    <h4>Parts</h4>
+                </center>
+            </div>
+            <div class="my-dashboard-content mt-3">
+                <div class="row">
+                	{{#each parts}}
+					        <div class="col-md-4">		                        
+                                <div class="my-dashboard-box-servings">
+                                    <div class="my-dashboard-box-header">
+                                        <h6>{{this.name}} <i class="fa fa-puzzle-piece"></i></h6>
+                                    </div>
+                                    <div class="my-dashboard-box-content">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                Price : {{this.price}}
+                                                <br>
+                                                Labour : {{this.labour}}
+                                                <br>
+                                                Validity : {{this.validity}}
+                                            </div>                                        
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <!-- Button trigger modal -->
+											    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{this._id}}">Edit</button>
+											    
+											    <!-- Modal -->
+											    <div class="modal fade" id="exampleModal{{this._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+											    <div class="modal-dialog" role="document">
+											        <div class="modal-content">
+											        <div class="modal-header">
+											            <h5 class="modal-title" id="exampleModalLabel">Edit {{this.name}}</h5>
+											            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											            <span aria-hidden="true">&times;</span>
+											            </button>
+											        </div>
+											        <div class="modal-body">
+											            <form action="/admin/updatePart/{{this._id}}" id="update_part_form{{this._id}}" method="post" name="update_part_form">
+											            	<div class="row">
+											            		<div class="col-md-6">
+											            			Part :
+											            		</div>
+											            		<div class="col-md-6">
+											            			<input type="text" name="part" value="{{this.name}}">
+											            			{{!-- <input type="hidden" name="part_id" value="<%= vpd.getPartId() %>">
+											            			<input type="hidden" name="vid" value="<%= vpd.getModelVarientId() %>"> --}}
+											            		</div>
+											            	</div>
+											            	<div class="row">
+											            		<div class="col-md-6">
+											            			Price : 
+											            		</div>
+											            		<div class="col-md-6">
+											            			<input type="number" name="price" value="{{this.price}}">
+											            		</div>
+											            	</div>
+											            	<div class="row">
+											            		<div class="col-md-6">
+											            			Quantity : 
+											            		</div>
+											            		<div class="col-md-6">
+											            			<input type="number" name="quantity" value="{{this.quantity}}">
+											            		</div>
+											            	</div>											            	
+											            	<div class="row">
+											            		<div class="col-md-6">
+											            			Labour :
+											            		</div>
+											            		<div class="col-md-6">
+											            			<input type="number" name="labour" value="{{this.labour}}">
+											            		</div>
+											            	</div>
+											            	<input type="submit" class="btn btn-success" form="update_part_form{{this._id}}" value="Save Changes">
+											            </form>
+											        </div>
+											        <div class="modal-footer">											        	
+											            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											            <!-- <button type="button" class="btn btn-primary">Update</button> -->
+											        </div>
+											        </div>
+											    </div>
+											    </div>
+                                            </div>
+                                            <div class="col-md-6">                                                                                            
+                                                <form action="/admin/deletePart/{{this._id}}" method="post">                                                    
+                                                    {{!-- <input type="hidden" name="part_id" value="<%= vpd.getPartId() %>">
+                                                    <input type="hidden" name="vid1" id="vid1" value="<%= request.getParameter("vid") %>"> --}}
+                                                    <input type="submit" name="submit" value="Delete" class="btn btn-danger btn-sm" onclick="alertUserDelete{{this._id}}()"> 
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                                                                
+		                    </div>  
+                            <script>
+                                function alertUserDelete{{this._id}}() {
+                                    alert("You are deleting your "+{{this.name}}+" !");
+                                }
+                            </script>                          
+			        	{{/each}}                                                           
+                </div>
+            </div>
+        </div>
+    </div>

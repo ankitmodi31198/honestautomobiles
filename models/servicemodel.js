@@ -1,5 +1,5 @@
-var mongoose = require(mongoose);
-var Schema = require(mongoose).Schema;
+var mongoose = require('mongoose');
+var Schema = require('mongoose').Schema;
 
 var Service = new Schema({
     name: String,

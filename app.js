@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+var session = require('express-session');
 
 mongoose.connect('mongodb://heroku_s0n3f8q1:moh2qurgku94icehkbshr1t5n3@ds149616.mlab.com:49616/heroku_s0n3f8q1', () => {
   console.log('====================================')
@@ -14,6 +15,7 @@ mongoose.connect('mongodb://heroku_s0n3f8q1:moh2qurgku94icehkbshr1t5n3@ds149616.
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
+var staffRouter = require('./routes/staff');
 
 var app = express();
 
@@ -25,11 +27,13 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({ secret: 'thisisrandomstringofkoalastore'}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
+app.use('/staff', staffRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

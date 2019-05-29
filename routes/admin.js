@@ -4,7 +4,7 @@ var Company = require('../models/companymodel')
 var Model = require('../models/modelmodel')
 var Varient = require('../models/varientmodel')
 var Parts = require('../models/partsmodel')
-// var Services = require('../models/servicemodel')
+var Services = require('../models/servicemodel')
 // var Lubricants = require('../models/lubricantmodel')
 // var ObjectId = require('mongoose').Types.ObjectId;
 
@@ -185,7 +185,7 @@ router.post('/updatePart/:pid', (req, res) => {
 // delete part
 router.post('/deletePart/:pid', (req, res) => {
     Parts.findByIdAndRemove({
-        _id: req.params.pid
+        '_id': req.params.pid
     }, (err, done) => {
         if (err) {
             throw err
@@ -202,7 +202,7 @@ router.get('/services/:vid', (req, res) => {
             throw err
         }
         Services.find({
-            varientId: req.params.vid
+            'varientId': req.params.vid
         }, (err, services) => {
             if (err) {
                 throw err
@@ -236,46 +236,59 @@ router.post('/addService/:vid', (req, res) => {
     })
 })
 
-// // get all lubricants
-// router.get('/lubricants/:vid', (req, res) => {
-//     Varient.findById(req.params.vid, (err, varient) => {
-//         if (err) {
-//             throw err
-//         }
-//         Lubricants.find({
-//             varientId: req.params.vid
-//         }, (err, lubricants) => {
-//             if (err) {
-//                 throw err
-//             }
-//             res.render('admin/lubricants', {
-//                 title: 'lubricants',
-//                 lubricants: lubricants,
-//                 varient: varient
-//             })
-//         })
-//     })
-// })
+// delete part
+router.post('/deleteService/:sid', (req, res) => {
+    Services.findByIdAndRemove({
+        '_id': req.params.sid
+    }, (err, done) => {
+        if (err) {
+            throw err
+        }
+        console.log(done)
+        res.redirect('back')
+    })
+})
 
-// // insert lubricants to varient
-// router.post('/addLubricant/:vid', (req, res) => {
-//     var l = new Lubricants()
+// get all lubricants
+router.get('/lubricants/:vid', (req, res) => {
+    Varient.findById(req.params.vid, (err, varient) => {
+        if (err) {
+            throw err
+        }
+        Lubricants.find({
+            varientId: req.params.vid
+        }, (err, lubricants) => {
+            if (err) {
+                throw err
+            }
+            res.render('admin/lubricants', {
+                title: 'lubricants',
+                lubricants: lubricants,
+                varient: varient
+            })
+        })
+    })
+})
 
-//     l.name = req.body.lubricants
-//     l.price = req.body.price
-//     l.quantity = req.body.quantity
-//     l.labour = req.body.labour
-//     l.validity = req.body.validity
-//     l.validityKM = req.body.validityKM
-//     l.varientId = req.params.vid
+// insert lubricants to varient
+router.post('/addLubricant/:vid', (req, res) => {
+    var l = new Lubricants()
 
-//     l.save((err, lubricants) => {
-//         if (err) {
-//             throw err
-//         }
-//         console.log(lubricants)
-//         res.redirect('back')
-//     })
-// })
+    l.name = req.body.lubricants
+    l.price = req.body.price
+    l.quantity = req.body.quantity
+    l.labour = req.body.labour
+    l.validity = req.body.validity
+    l.validityKM = req.body.validityKM
+    l.varientId = req.params.vid
+
+    l.save((err, lubricants) => {
+        if (err) {
+            throw err
+        }
+        console.log(lubricants)
+        res.redirect('back')
+    })
+})
 
 module.exports = router;

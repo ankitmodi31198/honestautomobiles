@@ -291,4 +291,17 @@ router.post('/addLubricant/:vid', (req, res) => {
     })
 })
 
+// delete lubricant
+router.post('/deleteLubricant/:lid', (req, res) => {
+    Lubricants.findByIdAndRemove({
+        '_id': req.params.lid
+    }, (err, done) => {
+        if (err) {
+            throw err
+        }
+        console.log(done)
+        res.redirect('back')
+    })
+})
+
 module.exports = router;

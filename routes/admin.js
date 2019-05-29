@@ -5,7 +5,7 @@ var Model = require('../models/modelmodel')
 var Varient = require('../models/varientmodel')
 var Parts = require('../models/partsmodel')
 var Services = require('../models/servicemodel')
-// var Lubricants = require('../models/lubricantmodel')
+var Lubricants = require('../models/lubricantmodel')
 // var ObjectId = require('mongoose').Types.ObjectId;
 
 /* GET home page. */

@@ -1,0 +1,238 @@
+<body style="background-color:#ffe6e6";>
+    
+<a href="/staff/dashboard" class="btn btn-sm btn-secondary">Dashboard</a>
+<div class="container">
+		<div>
+			<div class="row">
+				<div class="col-md-4">
+					<i class="fa fa-car" style="font-size: 50px;"></i>
+					{{customer.vehicleInfo.vehicleNumber}}
+				</div>
+				<div class="col-md-4"><center><h1>RiyaCars</h1></center></div>
+				<div class="col-md-4" align="right">
+					<i class="fa fa-clipboard" style="font-size: 50px;"></i>
+					JCNo.{{customer.jobcardInfo.jobcardNumber}}
+				</div>
+			</div><hr>
+		</div><br>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="row" style="border: solid;">
+						<div class="col-md-6">
+							<label for="cname">Customer Name: </label>
+						</div>
+						<div class="col-md-6">
+							<label for="cname">{{customer.name}}</label>
+						</div>
+						<div class="col-md-6">
+							<label for="email">Email:</label>
+						</div>
+						<div class="col-md-6">
+							<label for="email">{{customer.contact.email}}</label>
+						</div>
+						<div class="col-md-6">
+							<label for="arriavld">Mobile No:</label>
+						</div>
+						<div class="col-md-6">
+							<label for="arriavld">{{customer.contact.phone}}</label>
+						</div>
+						<div class="col-md-6">
+							<label for="arriavld">Arrival Date:</label>
+						</div>
+						<div class="col-md-6">
+							<label for="arriavld">{{customer.jobcardInfo.arrival.date}}</label>
+						</div>
+						<div class="col-md-6">
+							<label for="arriavlt">Arrival Time:</label>
+						</div>
+						<div class="col-md-6">
+							<label for="arriavlt">{{customer.jobcardInfo.arrival.time}}</label>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row" style="border: solid;">
+						<div class="col-md-6">
+							<label for="vin">VIN:</label>
+						</div>
+						<div class="col-md-6">
+							<label for="vin">{{customer.vehicleInfo.VIN}}</label>
+						</div>
+						<div class="col-md-6">
+							<label for="fueltype">Fuel Type:</label>
+						</div>
+						<div class="col-md-6">
+							<label for="fueltype">{{customer.vehicleInfo.fuelType}}</label>
+						</div>
+						<div class="col-md-6">
+							<label for="runningkm">Running Km:</label>
+						</div>
+						<div class="col-md-6">
+							<label for="runningkm">{{customer.jobcardInfo.runningKM}}</label>
+						</div>
+						<div class="col-md-6">
+							<label for="car">Car:</label>
+						</div>
+						<div class="col-md-6">
+								<label for="car">{{company.name}} - {{model.name}}</label>
+						</div>
+						<div class="col-md-6">
+							<label for="availablefuel">Available Fuel:</label>
+						</div>
+						<div class="col-md-6">
+							<label for="availablefuel">{{customer.jobcardInfo.availableFuel}}%</label>
+						</div>
+					</div>
+				</div>
+				{{customer.jobcadInfo.customerComplain}}
+				<div class="col-md-12">
+					<hr color=black>
+					<div class="row">
+						<div class="col-md-6">
+							<div style="background-color:#cc2900; height: 25%;">	
+								<center><font style="color: black; size: 25px;  ">Request</font><center>
+							</div>
+							<table class="table table-striped table-bordered customer-verification-info-table">
+		                                    <tbody>
+		                                    	  <tr>
+		                                        	<th width="20">SrNo.</th>
+		                                            <th>Complain</th>
+		                                        </tr>                                                
+		                                    	{{#each customer.jobcardInfo.customerComplain}}
+		                                      	<tr>
+		                                        	<td></td>
+		                                        	<td clospan=3>{{this.complain}}</td>
+		                                        </tr>
+		                                        {{/each}}
+		                                        
+		                                    </tbody>
+		                    </table>
+		                </div>
+						<div class="col-md-6">
+							<div style="background-color: #4abdac; height: 25%;">	
+								<center><font style="color: black; size: 25px;  ">Solution</font><center>
+							</div>
+							<table class="table table-striped table-bordered customer-verification-info-table">
+		                                    <tbody>
+		                                        <tr>
+		                                        	<th width="20">SrNo.</th>
+		                                            <th w>Solution</th> 
+		                                            <th >Price</th>
+		                                        </tr>
+		                                        {{#each customer.jobcardInfo.advisorSolution}}
+		                                      	<tr>
+		                                        	<td></td>
+		                                        	<td>{{this.description}}</td>
+		                                        	<td>{{this.price}}</td>
+		                                        </tr>
+                                                <input type="hidden" value="{{this.price}}">                                                              
+                                                {{/each}}
+		                                    </tbody>
+		                    </table>
+		                </div>
+					</div>
+				</div>
+
+				<div class="col-md-12">
+					<hr>
+				<div class="row">
+					<div class="col-md-4" style="border: solid;">
+						<div class="row">
+                            <div class="col-md-8">
+                                <label for="eprice">Estimated Price</label>
+                            </div>
+                            <div class="col-md-4">                            
+                                <label for="eprice">Estimate Price</label>
+                            </div>
+                            <div class="col-md-8">
+                                <label for="ddate">Delivery Date</label>
+                            </div>				
+                            <div class="col-md-4">
+                                <label for="ddate">{{customer.jobcardInfo.delivery.date}}</label>
+                            </div>			
+                            <div class="col-md-8">
+                                <label for="dtime">Delivery Time</label>
+                            </div>										
+                            <div class="col-md-4">
+                                <label for="dtime">{{customer.jobcardInfo.delivery.time}}</label><br>
+                            </div>
+						</div>
+					</div>
+					<div class="col-md-4"><center><img src="<%=jca.getImage() %>" style="width:300px;height:300px;"/></center>
+					</div>
+					<div class="col-md-4" style="border: solid;">
+						<div class="row">
+							<div class="col-md-6">
+							<label for="Toolkits">Tool Kits</label></div>
+							<div class="col-md-2">
+							<label for="Toolkits">Yes/No</label></div>
+							</div>
+								<div class="row">
+								<div class="col-md-6">
+									<label for="">serviceBook</label><br>
+									<label for="">toolKit</label><br>
+									<label for="">spareWheel</label><br>
+									<label for="">jack</label><br>
+									<label for="">jackHandle</label><br>
+									<label for="">carPerfume</label><br>
+									<label for="">clock</label><br>
+									<label for="">stereo</label><br>
+									<label for="">CDPlayer</label><br>
+									<label for="">mouthPieces</label><br>
+									<label for="">CDChanger</label><br>
+									<label for="">idols</label><br>
+									<label for="">wheelCover</label><br>
+									<label for="">wheelCap</label><br>
+									<label for="">mudFlaps</label><br>
+									<label for="">dickyMat</label><br>
+									<label for="">cigaretteLighter</label><br>
+									<label for="">speakerRR</label><br>
+									<label for="">speakerFR</label><br>
+									<label for="">tweeters</label><br>
+									<label for="">exlWarranty</label><br>									
+								</div>
+								<div class="col-md-2">
+									<label for="">{{customer.jobcardInfo.accessories.serviceBook}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.toolKit}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.spareWheel}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.jack}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.jackHandle}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.carPerfume}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.clock}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.stereo}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.CDPlayer}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.mouthPieces}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.CDChanger}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.idols}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.wheelCover}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.wheelCap}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.mudFlaps}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.dickyMat}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.cigaretteLighter}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.speakerRR}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.speakerFR}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.tweeters}}</label><br>
+									<label for="">{{customer.jobcardInfo.accessories.exlWarranty}}</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr color=black>
+					<div class="row">
+						<div class="col-md-6">
+							<br>
+							<center><hr style="width:30%;border: 1px solid;" >
+							<label for="sasign">Service Advisor Sign</label></center>
+						</div>
+						<div class="col-md-6">
+							<br>
+							<center>
+							<hr style="width:30%; border: 1px solid;">
+							<label for="csign">Customer Sign</label></center>
+						</div>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+</body>

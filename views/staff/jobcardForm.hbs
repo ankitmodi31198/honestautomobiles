@@ -1,0 +1,481 @@
+<script>
+    function addComplain(jobcard_number)
+    {
+        $('#addedComplains').empty()
+        var complain=document.getElementById("customer_complain").value;
+        var cid = document.getElementById('customerId').value;
+        $.ajax({
+            type: "GET",
+            url: "/staff/addComplain/"+complain+'/'+cid,
+            data: {
+                complain : complain,
+                jobcard_number : jobcard_number,                
+            },
+            cache: false,
+            success: function(response)
+            {
+                
+                for(var i = 0; i < response.length; i++) {
+                    var complain = response[i].complain
+
+                    $('#addedComplains').append('<tr><td>'+complain+'</td><td><button class="btn btn-danger btn-sm" onclick="removeComplain(\''+complain+'\')">Remove</button></td></tr>')
+                }
+                
+            }
+        });
+    }
+    function removeComplain(complain)
+    {
+        $('#addedComplains').empty()
+        var customerId = document.getElementById('customerId').value
+        
+        $.ajax({
+            type: "GET",
+            url: "/staff/removeComplain/"+complain+'/'+customerId,
+            cache: false,
+            success: function(response)
+            {
+                for(var i = 0; i < response.length; i++) {
+                    var complain = response[i].complain
+
+                    $('#addedComplains').append('<tr><td>'+complain+'</td><td><button class="btn btn-danger btn-sm" onclick="removeComplain(\''+complain+'\')">Remove</button></td></tr>')
+                }
+            }
+        })
+    }
+    function addSolution()
+    {
+        $('#addedSolutions').empty()
+        var totalPrice = parseInt(0)
+        var solution=document.getElementById("description").value;
+        var price = document.getElementById("price").value
+        var cid = document.getElementById('customerId').value;
+        $.ajax({
+            type: "GET",
+            url: "/staff/addSolution/"+solution+'/'+price+'/'+cid,            
+            cache: false,
+            success: function(response)
+            {
+                for(var i = 0; i < response.length; i++) {
+                    var solution = response[i].description
+                    var price = response[i].price
+                    var totalPrice = parseInt(totalPrice) + parseInt(price)
+
+                    $('#addedSolutions').append('<tr><td>'+solution+'</td><td>'+price+'</td><td><button class="btn btn-danger btn-sm" onclick="removeSolution(\''+solution+'\')">Remove</button></td></tr>')
+                }
+                $('#totalPrice').html(totalPrice)
+            }
+        });
+    }
+    function removeSolution(solution)
+    {
+        $('#addedSolutions').empty()
+        var customerId = document.getElementById('customerId').value
+        
+        $.ajax({
+            type: "GET",
+            url: "/staff/removeSolution/"+solution+'/'+customerId,
+            cache: false,
+            success: function(response)
+            {
+                for(var i = 0; i < response.length; i++) {
+                   var solution = response[i].description
+                    var price = response[i].price
+                    var totalPrice = parseInt(totalPrice) + parseInt(price)
+
+                    $('#addedSolutions').append('<tr><td>'+solution+'</td><td>'+price+'</td><td><button class="btn btn-danger btn-sm" onclick="removeSolution(\''+solution+'\')">Remove</button></td></tr>')
+                }
+                $('#totalPrice').html(totalPrice)
+            }
+        })
+    }
+</script>
+<input type="hidden" id="customerId" value="{{customer._id}}">
+
+<!-- Page Content -->
+    <main id="main">
+
+          <div class="my-new-header">
+            <button id="openNav" class="w3-button w3-xlarge my-hamburger-btn" onclick="w3_open()">&#9776;</button>
+            <span>
+                <a href="/admin" class="navbar-logo-link">JCMS</a> 
+            </span>
+            <div class="navbar-userpart">
+                <span class="navbar-userpart-username">Welcome, Admin | </span> <span><a href="">logout</a></span>
+            </div>
+        </div>
+        <form action="/staff/saveJobcardForm/{{customer._id}}" class="my-form container-95" method="POST">
+            <div class="my-form-heading">
+                <h5>Job Card Form</h5>
+            </div>
+            <div class="container-95 mb-5">
+                <div class="row my-form-row">
+                    <h6>Details</h6>                    
+                    <div class="col-md-6">  
+                        <h6>Customer Details</h6>                      
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label for="ro_number">Jobcard Number</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="jobcard_number" id="jobcard_number"  value='{{customer.jobcardInfo.jobcardNumber}}' readonly>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="vin">VIN</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="vin" id="vin" value = '{{customer.vehicleInfo.VIN}}' readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label for="vehicle_number">Vehicle Number</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="vehicle_number" id="vehicle_number" value = '{{customer.vehicleInfo.vehicleNumber}}' readonly>
+                            </div>
+                            {{!-- <div class="col-md-2">
+                                <label for="company_model">Model</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="company_model" id="company_model" value = '' readonly >
+                            </div> --}}
+                            <div class="col-md-2">
+                                <label for="make">Make</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="make" id="make" value='{{customer.vehicleInfo.fuelType}}' readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label for="customer_name">Customer Name</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="customer_name" id="customer_name" value = '{{customer.name}}' readonly>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="customer_email">Email</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="customer_email" id="customer_email" value = '{{customer.contact.email}}' readonly>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="customer_contact">Contact</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="customer_contact" id="customer_contact" value = '{{customer.contact.phone}}' readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Other Details</h6>
+                        <div class="row">
+                            {{!-- <div class="col-md-2">
+                                <label for="service_advisor">Service Advisor</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="service_advisor" id="service_advisor" value='<%=officer_name %>' readonly>
+                            </div> --}}
+                            <div class="col-md-2">
+                                <label for="work_type">Work Type</label>
+                            </div>
+                            <div class="col-md-4">
+                                <select name="work_type" id="work_type" required>
+                                	<option disabled selected>-----</option>
+                                    <option value="free service">Free Service</option>
+                                    <option value="paid service">Paid Service</option>
+                                    <option value="running repair">Running Repair</option>
+                                    {{!-- <option value="Insurance">Insurance</option> --}}
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="arrival_date">Arrival Date</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="arrival_date" id="arrival_date" value='{{arrivalDate}}' readonly>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="arrival_time">Arrival Time</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="arrival_time" id="arrival_time" value='{{arrivalTime}}' readonly>
+                            </div>
+                          
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label for="running_km">Running KM</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="running_km" id="running_km" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="available_fuel">Available Fuel</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="range" name="available_fuel" id="available_fuel" min="0" max="100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-form-row">
+                    <h6>Demand Code</h6>
+                    <div class="col-md-6">
+                        <h6>Customer's Requests</h6>
+                        <!-- take care while nesting it -->
+                        <!-- ALERT !!! -->
+                        <!-- ask JASH for while you work on this form -->
+                        <form action="" id="customer_complain_form">  
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="customer_complain">Customer's Complain</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" name="customer_complain" id="customer_complain" form="customer_complain_form">
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-primary btn-sm" form="customer_complain_form" onclick="addComplain('{{customer.jobcardInfo.jobcardNumber}}')">Add</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row mt-5">
+                            <div class="col-md-12" id="">
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th>Complains</th>
+                                        <th></th>
+                                    </tr>
+                                    <tbody id="addedComplains">
+                                    <!-- loop -->
+                                    
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" >
+                        <h6>Advisor's Solutions</h6>
+                        <!-- ALERT !!! -->
+                        <!-- ask JASH for while you work on this form -->
+                        <form action="" id="advisor_solution">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="description">Advisor's Solution</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="price">Price</label>
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-6">
+                                    <input type="text" name="description" id="description" form="advisor_solution">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="price" id="price" form="advisor_solution">
+                                </div>                                    
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-primary btn-sm" form="advisor_solution" onclick="addSolution()" >Add</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row mt-5">
+                            <div class="col-md-12" id="">
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th>Solutions</th>
+                                        <th>Price</th>
+                                        <th></th>
+                                    </tr>
+                                    <tbody id="addedSolutions">
+                                    <!-- loop -->
+                                    
+                                    </tbody>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th id="totalPrice"></th>
+                                        <th></th>
+                                    </tr>
+                                   
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-form-row">
+                    <div class="col-md-6">
+                        <h6> Delivery</h6>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="delivery_date">Delivery Date</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="date" name="delivery_date" id="delivery_date" required> 
+                            </div>
+                            <br>
+                           
+                            <br>
+                            <div class="col-md-6">
+                                <label for="delivery_time">Delivery Time</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="time" name="delivery_time" id="delivery_time" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Accessories</h6>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="checkbox" name="serviceBook" id="serviceBook" class="my-checkbox">
+                                <label for="serviceBook" class="">Service Book</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="checkbox" name="toolKit" id="toolKit" class="my-checkbox">
+                                <label for="toolKit" class="">Tool Kit</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="checkbox" name="spareWheel" id="spareWheel" class="my-checkbox">
+                                <label for="spareWheel" class="">Spare Wheel</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="checkbox" name="jack" id="jack" class="my-checkbox">
+                                <label for="" class="jack">jack</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="checkbox" name="jackHandle" id="jackHandle" class="my-checkbox">
+                                <label for="jackHandle" class="">Jack Handle</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="checkbox" name="carPerfume" id="carPerfume" class="my-checkbox">
+                                <label for="carPerfume" class="">Car Perfume</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="checkbox" name="clock" id="clock" class="my-checkbox">
+                                <label for="clock" class="">clock</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="checkbox" name="stereo" id="stereo" class="my-checkbox">
+                                <label for="stereo" class="">stereo</label>
+                            </div>                        
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="checkbox" name="cdPlayer" id="cdPlayer" class="my-checkbox">
+                                <label for="cdPlayer" class="">CD Player</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="checkbox" name="mouthPiece" id="mouthPiece" class="my-checkbox">
+                                <label for="mouthPiece" class="">Mouth Piece</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="checkbox" name="cdChanger" id="cdChanger" class="my-checkbox">
+                                <label for="cdChanger" class="">CD Changer</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="checkbox" name="cigaretteLighter" id="cigaretteLighter" class="my-checkbox">
+                                <label for="cigaretteLighter" class="">Cigarette Lighter</label>
+                            </div>                        
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="checkbox" name="exlWarranty" id="exlWarranty" class="my-checkbox">
+                                <label for="exlWarranty" class="">exl Warranty</label>
+                            </div>                                                    
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <label for="idols" class="">idols</label>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="number" name="idols" id="idols" value="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <label for="wheelCover" class="">Wheel Cover</label>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="number" name="wheelCover" id="wheelCover" value="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <label for="wheelCap" class="">Wheel Cap</label>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="number" name="wheelCap" id="wheelCap" value="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <label for="mudFlaps" class="">Mud Flaps</label>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="number" name="mudFlaps" id="mudFlaps" value="1">
+                                    </div>
+                                </div>
+                            </div>                     
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <label for="dickyMat" class="">Dicky Mat</label>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="number" name="dickyMat" id="dickyMat" value="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <label for="speakerRR" class="">Speaker RR</label>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="number" name="speakerRR" id="speakerRR" value="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <label for="speakerFR" class="">Speaker FR</label>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="number" name="speakerFR" id="speakerFR" value="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <label for="tweeters" class="">Tweeters</label>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="number" name="tweeters" id="tweeters" value="1">
+                                    </div>
+                                </div>
+                            </div>                     
+                        </div>
+                    </div>
+                </div>
+                <div class="my-submit-div">
+                    <center>
+                        <input type="submit" name="submit" id="submit" class="btn btn-secondary btn-sm">
+                    </center>                    
+                </div>
+            </div>
+        </form>
+    </main>

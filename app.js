@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 
 mongoose.connect('mongodb://heroku_s0n3f8q1:moh2qurgku94icehkbshr1t5n3@ds149616.mlab.com:49616/heroku_s0n3f8q1', () => {
+  // mongoose.connect('mongodb://localhost:27017/jobcard', () => {
   console.log('====================================')
   console.log('Connected to Database')
   console.log('====================================')
@@ -25,7 +26,7 @@ app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(session({ secret: 'thisisrandomstringofkoalastore'}));
 app.use(express.static(path.join(__dirname, 'public')));

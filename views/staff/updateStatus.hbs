@@ -1,0 +1,92 @@
+
+<!-- Page Content -->
+    <main>
+        <div class="my-new-header">
+            <button id="openNav" class="w3-button w3-xlarge my-hamburger-btn" onclick="w3_open()">&#9776;</button>
+            <span>
+                <a href="/admin" class="navbar-logo-link">JCMS</a> 
+            </span>
+            <div class="navbar-userpart">
+                <span class="navbar-userpart-username">Welcome, Admin | </span> <span><a href="">logout</a></span>
+            </div>
+        </div>
+	<!-- breadcrumbs at top of the page -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/staff/dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/staff/pendingCars">Pending Cars</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Jobs Done </li>
+            </ol>
+        </nav>    
+
+
+        <div class="my-form">
+            <div class="my-form-heading">
+                <h5>Jobs to be done</h5>
+            </div>
+        </div>
+    
+        <div class="container-95">
+            <form action="/staff/updateStatus/{{customerId}}" method="post">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>parts remaining</h5>
+                        <input type="hidden" name="jobcardnumber" value='<%=jobcardNumber %>' />
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Parts</th>
+                            </tr>
+                           {{#each pendingParts}}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" id="part{{this.partId}}" name='parts[]' value='{{this.partId}}' >    
+                                    <label for="part{{this.partId}}" class="checklist-label">{{this.name}}</label>
+                                </td>
+                            </tr>
+                           {{/each}}
+                          
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Services remaining</h5>
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Services</th>
+                            </tr>
+                            {{#each pendingServices}}
+                            <!-- Loop for services -->
+                            <tr>
+                                <td>
+                                    <input type="checkbox" id="service{{this.serviceId}}" name="services[]" value='{{this.serviceId}}'>     
+                                    <label for="service{{this.serviceId}}" class="checklist-label">{{this.name}}</label>
+                                </td>
+                            </tr>
+                           {{/each}}
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Lubricants remaining</h5>
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Lubricants</th>
+                            </tr>
+                             {{#each pendingLubricants}}
+                            <!-- Loop for Lubricants -->
+                            <tr>
+                                <td>
+                                    <input type="checkbox" id="lubricant{{this.lubricantId}}" name="lubricants[]" value='{{this.lubricantId}}'>    
+                                    <label for="lubricant{{this.lubricantId}}" class="checklist-label">{{this.name}}</label>
+                                </td>
+                            </tr>
+                            {{/each}}
+                           </table>
+                    </div>
+                </div>
+                <div class="my-submit-div">
+                    <center>
+                        <input type="submit" name="submit" id="submit" class="btn btn-secondary btn-md" value="Save Changes">
+                    </center>                    
+                </div>
+            </form>
+        </div>
+    </main>

@@ -1,0 +1,285 @@
+<script>
+    function partAdd(partid,partprice,partrepairflag)
+    {
+        var customerId = document.getElementById('customerId').value
+        $('#addedParts').empty()
+        $.ajax({
+            type: "POST",
+            url: "/staff/addPart/"+partid+'/'+partprice+'/'+partrepairflag+'/'+customerId,
+            cache: false,
+            success: function(response)
+            {
+                for(var i = 0; i < response.length; i++)
+                {
+                    $('#addedParts').append('<tr><td>'+response[i].name+'</td><td>'+response[i].price+'</td><td>'+response[i].quantity+'</td><td><button class="btn btn-danger btn-sm" onclick="removePart(\''+response[i].partId+'\', \''+customerId+'\')">Remove</button></td></tr>')
+                }
+            }
+        })
+    }    
+    function removePart(partid, customerId)
+    {
+        $('#addedParts').empty()
+        $.ajax({
+            type: "POST",
+            url: "/staff/removePart/"+partid+'/'+customerId,
+            cache: false,
+            success: function(response)
+            {
+                for(var i = 0; i < response.length; i++)
+                {
+                    $('#addedParts').append('<tr><td>'+response[i].name+'</td><td>'+response[i].price+'</td><td>'+response[i].quantity+'</td><td><button class="btn btn-danger btn-sm" onclick="removePart(\''+response[i].partId+'\', \''+customerId+'\')">Remove</button></td></tr>')
+                }
+            }
+        })
+    }
+</script>
+<input type="hidden" value="{{customer._id}}" id="customerId">
+<!-- Page Content -->
+    <main id="main">
+ <div class="my-new-header">
+        <button id="openNav" class="w3-button w3-xlarge my-hamburger-btn" onclick="w3_open()">&#9776;</button>
+        <span>
+            <a href="/admin" class="navbar-logo-link">JCMS</a> 
+        </span>
+        <div class="navbar-userpart">
+            <span class="navbar-userpart-username">Welcome, Admin | </span> <span><a href="">logout</a></span>
+        </div>
+    </div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="saDashboard.jsp">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="pendinglist.jsp">Pending List</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Jobs</li>
+        </ol>
+    </nav>  
+    
+    <div class="row my-form-row">
+        <div class="col-md-6">
+            <h6>Customer's Details</h6>
+            <table class="table table-striped table-bordered customer-verification-info-table">
+                <tbody>
+                    <tr>
+                        <th>Name</th>
+                            <td>{{customer.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Contact</th>
+                            <td>{{customer.contact.phone}}</td>
+                    </tr>
+                    <tr>
+                        <th>Car Model</th>
+                            <td>{{customer.vehicleInfo.model.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Fuel Type</th>
+                            <td>{{customer.vehicleInfo.fuelType}}</td>
+                    </tr>
+                    <tr>
+                        <th> Available Fuel </th>
+                            <td>{{customer.jobcardInfo.availableFuel}}%</td>
+                    </tr>
+                    {{!-- <tr>
+                        <th>Service Advisor</th>
+                            <td>{{customer.name}}</td>
+                    </tr>                                 --}}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h6>Jobcard's Details</h6>
+            <table class="table table-striped table-bordered customer-verification-info-table">
+                <tbody>
+                    <tr>
+                        <th>Vehicle Number</th>
+                            <td>{{customer.vehicleInfo.vehicleNumber}}</td>
+                    </tr>
+                    <tr>
+                        <th>Jobcard Number</th>
+                            <td>{{customer.jobcardInfo.jobcardNumber}}</td>
+                    </tr>
+                    <tr>
+                        <th>Running Km </th>
+                            <td>{{customer.jobcardInfo.runningKM}}</td>
+                    </tr>
+                    <tr>
+                        <th>Work Type</th>
+                            <td>{{customer.jobcardInfo.workType}}</td>
+                    </tr>
+                    <tr>
+                        <th>Delivery Date</th>
+                            <td>{{customer.jobcardInfo.delivery.date}}</td>
+                    </tr>
+                    <tr>
+                        <th>Delivery Time</th>
+                            <td>{{customer.jobcardInfo.delivery.time}}</td>
+                    </tr>                                
+                </tbody>
+            </table>
+        </div>                    
+    </div>
+    
+    <div class="row">
+            <div class="col-md-6">
+            <table class="table table-striped">
+                <tr>
+                    <th>Customer Requests</th>			 					 		
+                </tr>
+                {{#each customer.jobcardInfo.customerComplain}}
+                <tr>
+                    <td>{{this.complain}}</td>                    
+                </tr>
+                {{/each}}			
+            </table>
+                
+            </div>
+            <div class="col-md-6">
+            <table class="table table-striped">
+                <tr>
+                    <th style="width: 70%;">Advisor's Solutions</th>			 					 		
+                    <th>Estimated Price</th>
+                </tr>
+                {{#each customer.jobcardInfo.advisorSolution}}				 	
+                <tr>
+                    <td>{{this.description}}</td>		
+                    <td>{{this.price}}</td>					
+                </tr>
+                {{/each}}					
+            </table>
+            </div>
+    </div>
+
+    <div class="my-form-heading">
+            <h5>Add Jobs</h5>
+    </div>
+    <div class="row mt-3 mb-5 container-95">
+        <div class="col-md-4">
+            <table id="data-table-simple-1" class="table table-striped">
+                <thead>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Add</th>
+                    <th>Repair</th>
+                </thead>
+                <tbody>
+                    {{#each parts}}
+                        <tr>
+                        <td>{{this.name}}</td>
+                        <td><input type="text" name="part_price" value="{{this.price}}"	id="part_price{{this._id}}" readonly required style="width:60px;">
+                        <input	type="hidden" name="part_repair_flag" value="0" id="part_repair_flag{{this._id}}">
+                        </td>
+                        <td ><a href="javascript:void(0)" onclick="partAdd('{{this._id}}', document.getElementById('part_price{{this._id}}').value, document.getElementById('part_repair_flag{{this._id}}').value)">+</a></td>
+                        <td><a href="javascript:void(0)" onclick="repairClicked('{{this._id}}')">repair</a></td>
+                        </tr>      
+                    {{/each}}
+                </tbody>                
+            </table>
+        </div>
+        <div class="col-md-4">
+            <table id="data-table-simple-2" class="table table-striped">
+                <thead>
+                    <th>Name</th>
+                    
+                    <th>Price</th>
+                    <th>Add</th>
+                </thead>
+                <tbody>
+                    {{#each services}}
+                        <tr>                    
+                        <td data-toggle="tooltip" data-placement="bottom" title="{{this.details}}" >{{this.name}}</td>
+                        <td>{{this.price}}</td>
+                        <td><a href="javascript:void(0)" onclick="serviceAdd('{{this._id}}','{{customer.jobcardInfo.jobcardNumber}}')"> + </a></td>
+                        </tr>           
+                    {{/each}}
+                </tbody>
+            </table>
+            </div>
+            
+        <div class="col-md-4" >
+            <table id="data-table-simple-3" class="table table-striped"  >
+                        <thead>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity()</th>
+                    <th>Add</th>
+                </thead>  
+                <tbody>
+                    {{#each lubricants}}
+                    <tr>
+                        <td>{{this.name}}</td>
+                        <td>{{this.price}}</td>
+                        <td>{{this.quantity}}</td>
+                        <td><a href="javascript:void(0)" onclick="lubricantAdd('{{this._id}}','{{customer.jobcardInfo.jobcardNumber}}')"> + </a></td>                          
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- added servings tables goes here -->
+        <div class="my-form-heading">
+            <h5>Added Jobs</h5>
+        </div>
+        <div class="row mt-3 container-95">
+            <div class="col-md-4" id="">
+                <table id="data-table-simple-4" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody id="addedParts">
+                                  
+                    </tbody>
+                </table>     
+            </div>
+            <div class="col-md-4" id="addedServices">
+                <table id="data-table-simple-5" class="table table-striped">
+                    <thead>
+                        <th>Name</th>
+                        
+                        <th>Price</th>
+                        <th>Remove</th>
+                    </thead>
+                    <tbody>
+                        <!-- data -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4" id="addedLubricants">
+  
+                <table id="data-table-simple-6" class="table table-striped">
+                    <thead>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Remove</th>
+                    </thead>
+                 <!--  data  -->
+                </table>     
+            </div>
+        </div>
+        <div class="row">
+        	<div class="col-md"></div>
+        	<div class="col-md-1">
+        		<a href="/staff/pendingCars" class="btn btn-danger btn-md">Close</a>
+        	</div>
+        	<div class="col-md"></div>        	
+        </div>
+</main>
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();   
+});
+function repairClicked(partid) {
+     var pp = document.getElementById("part_price"+partid);
+     var prf = document.getElementById("part_repair_flag"+partid);
+
+     pp.readOnly = false;    
+     prf.value = "1";
+     pp.value = "";
+     pp.focus();
+   }
+</script>

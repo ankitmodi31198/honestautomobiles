@@ -1,0 +1,82 @@
+<header>
+        <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="mySidebar">
+            <button class="w3-bar-item w3-button w3-large"
+            onclick="w3_close()">Close &times;</button>
+             <h3 class="w3-bar-item">Menu</h3>
+        <a href="saDashboard.jsp" class="w3-bar-item w3-button">Dashboard</a>
+        
+        <a href="newarrival.jsp" class="w3-bar-item w3-button">New Arrival Cars</a>
+        <a href="pendinglist.jsp" class="w3-bar-item w3-button">Pending Cars</a>
+        <a href="repairedlist.jsp" class="w3-bar-item w3-button">Repaired Cars</a>
+        <a href="closedlist.jsp" class="w3-bar-item w3-button">Closed Cars</a>
+        <a href="alljobcardlist.jsp" class="w3-bar-item w3-button">Jobcard View</a>
+        <a href="serviceadvisorPR.jsp" class="w3-bar-item w3-button">Reports</a>           
+    </header>
+<!-- Page Content -->
+    <div>
+
+         <div class="my-new-header">
+            <button id="openNav" class="w3-button w3-xlarge my-hamburger-btn" onclick="w3_open()">&#9776;</button>
+            <span>
+                <a href="/admin" class="navbar-logo-link">JCMS</a> 
+            </span>
+            <div class="navbar-userpart">
+                <span class="navbar-userpart-username">Welcome, Admin | </span> <span><a href="">logout</a></span>
+            </div>
+        </div>
+
+       <!-- breadcrumbs at top of the page -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="saDashboard.jsp">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Repaired Cars</li>
+            </ol>
+        </nav>    
+        
+        <!-- dashboard -->
+        <div class="my-dashboard">
+            <div class="my-dashboard-header">
+                <center>
+                    <h4>Repaired Cars list</h4>
+                </center>
+            </div>
+            <div class="container mt-5">
+	   		<table id="data-table-simple-1" class="table">
+			   	<thead style="text-align: center;">
+			   		<tr>
+			   			<th>Vehicle No</th>
+			   			<th>JobCard No</th>			   				
+			   			<th>Arrival Date</th>
+			   			<th>Customer Name</th>
+			   			<th>Company</th> 
+                        <th>Model</th>
+			   			<th>Delivery Date</th>
+			   			<th>Action</th>
+			   		</tr>
+			   	</thead>
+			   	<tbody style="font-size: 12px; text-align: center;">
+                    {{#each customers}}
+                        <tr>
+                        <td>{{this.vehicleInfo.vehicleNumber}}</td>
+                        <td>{{this.jobcardInfo.jobcardNumber}}</td>
+                        <td>{{this.jobcardInfo.arrival.date}}</td>
+                        <td>{{this.name}}</td>
+                        <td>{{this.vehicleInfo.company.name}}</td>
+                        <td>{{this.vehicleInfo.model.name}}</td>                            
+                        <td>{{this.jobcardInfo.delivery.date}}</td>
+                        <td><a href="/staff/completedView/{{this._id}}">View</a></td>
+                        </tr>	 
+                    {{/each}}
+			   	</tbody>
+	   		</table>
+		</div>
+            
+            <div class="my-dashboard-content mt-3">
+                <div class="row">
+                    <!-- Put the iterator over here, put this whole div in the loop and the cards will be set accordingly -->
+                    <!-- LOOP Starts -->
+                    
+          
+                </div>
+            </div>
+        </div>

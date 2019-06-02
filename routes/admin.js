@@ -270,11 +270,11 @@ router.get('/lubricants/:vid', (req, res) => {
     })
 })
 
-// insert lubricants to varient
+// add lubricants to varient
 router.post('/addLubricant/:vid', (req, res) => {
     var l = new Lubricants()
 
-    l.name = req.body.lubricants
+    l.name = req.body.lubricant
     l.price = req.body.price
     l.quantity = req.body.quantity
     l.labour = req.body.labour

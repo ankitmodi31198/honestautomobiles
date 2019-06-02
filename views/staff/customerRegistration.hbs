@@ -1,3 +1,48 @@
+<script>   
+    function company_change()
+    {
+        $('#company_model').empty()
+        $('#model_varient').empty()
+        
+        $('#company_model').append('<option>--</option>')
+        var company_id = $("#vehicle_company").val();        
+        $.ajax({
+            type: "GET",
+            url: "/staff/getModelsByCompanyId/"+company_id,
+            data: {},
+            cache: false,                        
+            success: function(response)
+            {                
+                for(var i = 0; i < response.length; i++) {
+                    var text = response[i].name
+                    var id = response[i]._id
+
+                    $('#company_model').append('<option value='+id+'>'+text+'</option>')                    
+                }                          
+            }
+        });
+    }
+    function model_change()
+    {
+        $('#model_varient').empty()
+        var model_id = $("#company_model").val();        
+        $.ajax({
+            type: "GET",
+            url: "/staff/getVarientsByModelId/"+model_id,
+            data: {},
+            cache: false,                        
+            success: function(response)
+            {                
+                for(var i = 0; i < response.length; i++) {
+                    var text = response[i].name
+                    var id = response[i]._id
+
+                    $('#model_varient').append('<option value='+id+'>'+text+'</option>')                    
+                }                          
+            }
+        });
+    }
+</script>
 <header>
         <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="mySidebar">
             <button class="w3-bar-item w3-button w3-large"
@@ -7,7 +52,6 @@
         <a href="search.jsp" class="w3-bar-item w3-button">Search Customer</a>
         <a href="serviceadvisorlist.jsp" class="w3-bar-item w3-button">Service Advisor List</a>
     </header>
-
 <main>
     	 <div class="my-new-header">
             <button id="openNav" class="w3-button w3-xlarge my-hamburger-btn" onclick="w3_open()">&#9776;</button>
@@ -221,7 +265,7 @@
                         </div>
                     </div>                    
                 </div>
-                {{!-- <div class="row my-form-row">
+                <div class="row my-form-row">
                     <div class="col-md-3">
                         <div class="row">
                             <div class="col-md-4">
@@ -229,14 +273,10 @@
                             </div>
                             <div class="col-md-8">
                                 <select name="vehicle_company" id="vehicle_company" onchange="company_change()" required>
-                                <option selected>--</option>
-                                 <%List<VehicleCompany> list= VehicleCompanyDao.getCompanies();
-					                                    Iterator itr=list.iterator();  
-					                                    while(itr.hasNext()){ 
-					                                    	VehicleCompany v = (VehicleCompany)itr.next();
-					                                     out.println("<option value='"+v.getVehicleCompanyId()+"'>"+v.getVehicleCompanyName()+"</option>");  
-					                                    }
-					                                    	%>
+                                    <option selected>--</option>
+                                    {{#each companies}}
+                                        <option value="{{this._id}}">{{this.name}}</option>
+                                    {{/each}}
                                 </select>
                             </div>
                         </div>
@@ -248,7 +288,7 @@
                             </div>
                             <div class="col-md">
                                 <select name="company_model" id="company_model" onchange="model_change()" required>
-                                 <option selected>--</option>
+                                    <option value="">--</option>
                                 </select>
                             </div>
                         </div>
@@ -260,12 +300,12 @@
                             </div>
                             <div class="col-md">
                                 <select name="model_varient" id="model_varient" required>
-                                 <option selected>--</option>
+                                    <option value="">--</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                </div> --}}
+                </div>
                 <div class="my-submit-div">
                     <center>
                     	<input type="submit" name="submit" id="submit" class="btn btn-secondary btn-sm">

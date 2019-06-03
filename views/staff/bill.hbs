@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bill</title>
+<style type="text/css">
+.boxed {
+	border: 1px solid black;
+	margin: 80px;
+}
+
+.fix {
+	margin-left: 30px;
+	margin-right: 30px;
+}
+</style>
+
+</head>
+<body>
+	<div class="boxed">
+		<br>
+		<div class="fix">
+			<table style="width: 100%;">
+				<tr>
+					<th align="left" ><img src="../public/image/logobill.jpg" style="width: 15%; height:15%;"></th>
+					
+					<th align="right" style="width: 20%; color: red;"><b><h3>Honest Automobiles</h3></b></th>
+					 
+				</tr>
+			</table>
+		</div>
+		<hr class="fix" color="gray">
+		<div class="fix">
+			<table style="width: 100%;">
+			<tr>	
+				<td align="left" style="width: 40%;"><b>Honest Automobies</b><br>
+					Gota Ognaj Road,<br>
+					Opp. Jilla Sixan Tamil Kendra (ITI),<br>
+					Bapa Sitaram Madhuli,Gota<br>
+					<b>M: 9227881234</b><br>
+					<b>M: 9924450123</b>
+				</td>
+			<td align="right" style="width: 40%;">{{todayDate}}<br>Bill
+					No:<b>{{customer.jobcardInfo.jobcardNumber}}</b>
+				</td></tr>
+			</table>
+		</div>
+		<hr class="fix" color="gray">
+		<div class="fix">
+			<table style="width: 100%;">
+				<tr>
+					<th bgcolor=#95C8D8 align="left" style="width: 50%">Customer
+					Info</th>
+					<th bgcolor=#95C8D8 align="left">Vehicle Details</th>
+				</tr>
+				<tr>
+					<td>Name:<b>{{customer.name}}</b></td>
+					<td>Vehicle Number:<b>{{customer.vehicleInfo.vehicleNumber}}</b></td>
+				</tr>
+				<tr>
+					<td>Mobile Number:{{customer.contact.phone}}
+					</td>
+					<td>Model:{{customer.vehicleInfo.model.name}}({{customer.vehicleInfo.company.name}})</td>
+				</tr>
+				<tr>
+					<td>Email:{{customer.contact.email}}</td>
+					<td>Engine No:{{customer.vehicleInfo.engineNumber}}
+					</td>
+				</tr>
+
+				<tr>
+					<td>Paid Using:Cash</td>
+					<td>In KM Reading:{{customer.jobcardInfo.runningKM}}</td>
+				</tr>
+				
+			</table>
+			<table style="width: 100%;">
+				<tr>
+					<th bgcolor=#95C8D8 align="left" style="width: 50%">Jobcard
+					Info</th>
+				<th bgcolor=#95C8D8 align="left">Adviser Details</th>
+				</tr>
+				<tr>
+					<td>Work Type:Paid Service</td>
+					<td>Adviser Name:<b> Rameshbhai Chaudhary</b></td>
+				</tr>
+				<tr>
+					<td>Date Arrival:{{customer.jobcardInfo.arrival.date}}</td>
+					<td>Advisor Contact: 9227881234
+					</td>
+				</tr>
+				
+			</table>
+
+			<table style="width: 100%;">
+				<thead>
+					<th bgcolor=#95C8D8 align="left" style="width: 5%;">Sr.No</th>
+					<th bgcolor=#95C8D8 align="left" style="width: 30%;">Spare and Parts</th>
+					<th bgcolor=#95C8D8 align="right" style="width: 10%;">Quantity</th>
+					<th bgcolor=#95C8D8 align="right" style="width: 10%;">Price</th>
+					<th bgcolor=#95C8D8 align="right" style="width: 10%;">Labour
+						Price</th>
+					<!-- <th bgcolor=#95C8D8 align="right" style="width: 10%;">SGST</th>
+					<th bgcolor=#95C8D8 align="right" style="width: 10%;">CGST</th> -->
+					<th bgcolor=#95C8D8 align="right" style="width: 15%;">Amount</th>
+				</thead>
+				<tbody>
+					{{#each customer.jobcardInfo.parts}}
+					<tr>
+						<td>{{@index}}</td>
+						<td align="left">{{this.name}}</td>
+						<td align="right">{{this.quantity}}</td>
+						<td align="right">{{this.price}}</td>
+						<td align="right">{{this.labour}}</td>
+						<td align="right">this.labour + this.price</td>
+					</tr>
+					{{/each}}
+				</tbody>
+			</table>
+
+			<table style="width: 100%;">
+				<thead>
+					<th bgcolor=#95C8D8 align="left" style="width: 5%;">Sr.No</th>
+					<th bgcolor=#95C8D8 align="left" style="width: 30%;">Lubricants</th>
+					<th bgcolor=#95C8D8 align="right" style="width: 10%;">Quantity</th>
+					<th bgcolor=#95C8D8 align="right" style="width: 10%;">Price</th>
+					<th bgcolor=#95C8D8 align="right" style="width: 10%;">Labour
+						Price</th>
+					
+					<th bgcolor=#95C8D8 align="right" style="width: 15%;">Amount</th>
+				</thead>
+				<tbody>
+					{{#each customer.jobcardInfo.lubricants}}
+						<tr>
+							<td>{{@index}}</td>
+							<td>{{this.name}}</td>
+							<td align="right">{{this.quantity}}</td>
+							<td align="right">{{this.price}}</td>
+							<td align="right">{{this.labour}}</td>
+							<td align="right">this.price + this.labour</td>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+			
+			
+			<table style="width: 100%;">
+				<thead>
+					<th bgcolor=#95C8D8 align="left" style="width: 5%;">Sr.No</th>
+					<th bgcolor=#95C8D8 align="left" style="width: 50%; ">Services</th>
+					<th bgcolor=#95C8D8 align="right" style="width: 10%;">Price</th>
+					<th bgcolor=#95C8D8 align="right" style="width: 15%;">Amount</th>
+				</thead>
+				<tbody>
+					{{#each customer.jobcardInfo.services}}
+						<tr>
+							<td>{{@index}}</td>
+							<td>{{this.name}}</td>
+							<td align="right">{{this.price}}</td>
+							<td align="right">{{this.price}}</td>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+			
+			
+			<hr color="red">
+			<table style="width: 100%;">
+				<tr>
+					<td>All tax included</td>
+					<td align="right" style="width: 20%;"><b> Total: </b></td>
+					<td style="width: 20%;" align="right"><b>{{customer.jobcardInfo.payment.total}}</b> </td>
+				</tr>
+				{{!-- <tr>
+					<td>All tax included</td>
+					<td align="right" style="width: 20%;"><b> Discount: </b></td>
+					<td style="width: 20%;" align="right"><b>{{customer.jobcardInfo.payment.discount.amount}}</b> </td>
+				</tr> --}}
+				{{!-- <tr>
+					<td></td>
+					<td align="right" style="width: 20%;"><b> SGST: </b></td>
+					<td style="width: 20%;" align="right"><b>1585.00</b> </td>
+				</tr>
+				<tr>
+					<td></td>
+					<td align="right" style="width: 20%;"><b> CGST: </b></td>
+					<td style="width: 20%;" align="right"><b>1585.00</b> </td>
+				</tr> --}}
+				<tr>
+					<td></td>
+					<td align="right" style="width: 20%;"><b>Final Amount: </b> </td>
+					<td style="width: 20%;" align="right"><b>{{customer.jobcardInfo.payment.final}}</b></td>
+				</tr>
+
+			</table>
+			<hr color="red">
+			<br>
+		</div>
+		
+	
+
+		<div color="black" class="fix">
+			<table style="width: 100%">
+				<tr>
+					<th style="width: 25%" ; align="center">
+					</th>
+					
+					<th style="width: 25%" ; align="center"></th>
+ 
+				</tr>
+				<br>
+				<tr>
+					<td><hr color="black" style="width: 30%;"></td>
+					<td><hr color="black" style="width: 30%;"></td>
+				<tr>
+					<td align="center"><span style="width: 30%;"><b>Manager Sign</b></span></td>
+
+					<td align="center"><span style="width: 30%;  "><b>Customer Sign</b></span></td>
+
+				</tr>
+			</table>
+		</div>
+		<hr color="gray" class="fix">
+		<center>
+			<h4>Thank you! Serice Regularly and Ride safely.</h4>
+		</center>
+		<!-- <h3> -->
+			<form action="../DownloadServlet" method="get">
+				<center>
+					
+					<input type="hidden" name="id" value=4 />
+					<input type="submit" value="Pay & Genarate Pdf" />
+				</center>
+			</form>
+			
+		<!-- </h3> -->
+	</div>
+	
+
+
+
+</body>
+</html>

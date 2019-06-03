@@ -95,6 +95,7 @@ var CustomerInfo = new Schema({
             price: String,
             quantity: Number,
             repairFlag: Boolean,
+            labour: Number,
             status: String
         },
         services: {
@@ -103,6 +104,7 @@ var CustomerInfo = new Schema({
             serviceId: String,
             details: String,
             price: Number,
+            labour: Number,
             status: String
         },
         lubricants: {
@@ -110,6 +112,7 @@ var CustomerInfo = new Schema({
             name: String,
             lubricantId: String,
             price: String,
+            labour: Number,
             status: String
         },
     

@@ -544,7 +544,8 @@ router.post('/addPart/:pid/:pp/:prf/:cid', (req, res) => {
                     'price': req.params.pp,
                     'quantity': part.quantity,
                     'repairFlag': req.params.prf,
-                    'status': 'pending'
+                    'status': 'pending',
+                    'labour': part.labour                  
                 }
             }
         }, {
@@ -559,6 +560,67 @@ router.post('/addPart/:pid/:pp/:prf/:cid', (req, res) => {
                 }
                 res.send(customer.jobcardInfo.parts)
             })
+        })
+    })
+})
+
+// jash's
+// ajax add lubricant
+router.post('/addLubricant/:lid/:cid', (req, res) => {
+    var lid = req.params.lid
+    var cid = req.params.cid
+
+    Lubricants.findById(lid, (err, lubricant) => {
+        if (err) {
+            throw err
+        }
+        CustomerInfo.findByIdAndUpdate(cid, {
+            $push: {
+                'jobcardInfo.lubricants': {
+                    'name': lubricant.name,
+                    'lubricantId': req.params.lid,
+                    'price': lubricant.price,
+                    'status': 'pending',
+                    'labour': lubricant.labour 
+                }
+            }
+        }, {
+            upsert: true
+        }, (err, done) => {
+            if (err) {
+                throw err
+            }
+            console.log(done)
+            CustomerInfo.findById(cid, (err, customer) => {
+                if (err) {
+                    throw err
+                }
+                res.send(customer.jobcardInfo.lubricants)
+            })
+        })
+    })
+})
+
+// ajax for removing part
+router.post('/removeLubricant/:lid/:cid', (req, res) => {
+    CustomerInfo.findByIdAndUpdate(req.params.cid, {
+        $pull: {
+            'jobcardInfo.lubricants': {
+                'lubricantId': req.params.lid
+            }
+        }
+    }, {
+        upsert: true
+    }, (err, done) => {
+        if (err) {
+            throw err
+        }
+        console.log(done.jobcardInfo.lubricants)
+        CustomerInfo.findById(req.params.cid, (err, customer) => {
+            if (err) {
+                throw err
+            }
+            res.send(customer.jobcardInfo.lubricants)
         })
     })
 })
@@ -672,88 +734,176 @@ router.get('/updateStatus/:cid', (req, res) => {
 
 router.post('/updateStatus/:cid', (req, res) => {
     var parts = req.body.parts
-    var services = req.body.services
     var lubricants = req.body.lubricants
+
+    console.log(parts)
+    console.log(lubricants)
+
+    if (parts != null) {
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i];
+            console.log(part)
     
-    for (let i = 0; i < parts.length; i++) {
-        const part = parts[i];
-        
-        CustomerInfo.findOneAndUpdate({
-            'jobcardInfo.parts.partId': part
-        }, {
-            $set: {
+            CustomerInfo.findOneAndUpdate({
+                '_id': req.params.cid,
+                'jobcardInfo.parts.partId': part
+            }, {
                 'jobcardInfo.parts.$.status': 'completed'
-            }
-        }, {
-            upsert: true
-        }, (err, done) => {
-            if (err) {
-                throw err
-            }
-            console.log(done)
-        })
+            }, (err, done) => {
+                if (err) {
+                    throw err
+                }        
+            })
+        }
     }
-
-    // for (let i = 0; i < services.length; i++) {
-    //     const service = services[i];
-        
-    //     CustomerInfo.update({
-    //         'jobcardInfo.services.serviceId': service
-    //     }, {
-    //         $set: {
-    //             'jobcardInfo.services.$.status': 'completed'
-    //         }
-    //     }, {
-    //         upsert: true
-    //     }, (err, done) => {
-    //         if (err) {
-    //             throw err
-    //         }
-    //         console.log(done)            
-    //     })
-    // }
-
-    // for (let i = 0; i < lubricants.length; i++) {
-    //     const lubricant = lubricants[i];
-        
-    //     CustomerInfo.update({
-    //         'jobcardInfo.lubricants.lubricantId': lubricant
-    //     }, {
-    //         $set: {
-    //             'jobcardInfo.lubricants.$.status': 'completed'
-    //         }
-    //     }, {
-    //         upsert: true
-    //     }, (err, done) => {
-    //         if (err) {
-    //             throw err
-    //         }
-    //         console.log(done)            
-    //     })
-    // }
-
+    if (lubricants != null) {
+        for (let i = 0; i < lubricants.length; i++) {
+            const lubricant = lubricants[i];
+            console.log(lubricant)
+    
+            CustomerInfo.findOneAndUpdate({
+                '_id': req.params.cid,
+                'jobcardInfo.lubricants.lubricantId': lubricant
+            }, {
+                'jobcardInfo.lubricants.$.status': 'completed'
+            }, (err, done) => {
+                if (err) {
+                    throw err
+                }        
+            })
+        }
+    }
+    
     CustomerInfo.count({
         'jobcardInfo.parts.status': 'pending'
     }, (err, pendingPartCount) => {
         if (err) {
             throw err
         }
-        if (pendingPartCount === 0) {
+        CustomerInfo.count({
+            'jobcardInfo.lubricants.status': 'pending'
+        }, (err, pendingLubricantCount) => {
+            if (err) {
+                throw err
+            }
+
+            if (pendingPartCount === 0  && pendingLubricantCount === 0) {
+                CustomerInfo.findOneAndUpdate({
+                    _id: req.params.cid
+                }, {
+                    'jobcardInfo.status': 'repaired'
+                }, (err, done) => {
+                    if (err) {
+                        throw err
+                    }
+                    
+                    
+                    var partsTotalPrice = parseInt(0)
+                    var servicesTotalPrice = parseInt(0)
+                    var lubricantsTotalPrice = parseInt(0)
+                    var totalPrice = parseInt(0)
+                    var partLabour = parseInt(0)
+                    var serviceLabour = parseInt(0)
+                    var lubricantLabour = parseInt(0)
+                    CustomerInfo.findById(req.params.cid, (err, customer) => {
+                        if (err) {
+                            throw err
+                        }
+                        
+                        for (let i = 0; i < customer.jobcardInfo.parts.length; i++) {
+                            partsTotalPrice = partsTotalPrice + parseInt(customer.jobcardInfo.parts[i].price);  
+                            if (customer.jobcardInfo.parts[i].repairFlag === "0") {
+                                partLabour = partLabour + customer.jobcardInfo.parts[i].labour
+                            }          
+                        }
+                        for (let i = 0; i < customer.jobcardInfo.services.length; i++) {
+                            servicesTotalPrice = servicesTotalPrice + parseInt(customer.jobcardInfo.services[i].price); 
+                            serviceLabour = serviceLabour + customer.jobcardInfo.services[i].labour           
+                        }
+                        for (let i = 0; i < customer.jobcardInfo.lubricants.length; i++) {
+                            lubricantsTotalPrice = lubricantsTotalPrice + parseInt(customer.jobcardInfo.lubricants[i].price);   
+                            lubricantLabour = lubricantLabour + parseInt(customer.jobcardInfo.lubricants[i].labour)         
+                        }
+                        totalPrice = partsTotalPrice + servicesTotalPrice + lubricantsTotalPrice + partLabour + serviceLabour + lubricantLabour      
+                        
+                        CustomerInfo.findByIdAndUpdate(req.params.cid, {
+                            $set: {
+                                'jobcardInfo.payment.total': totalPrice,
+                                'jobcardInfo.payment.final': totalPrice
+                            }
+                        }, (err, done) => {
+                            if (err) {
+                                throw err
+                            }
+                            res.render('staff/repairedView', {
+                                title: 'repaired View',
+                                customer: customer
+                            })
+                        })                        
+                    })
+                })
+            } else {
+                res.redirect('back')
+            }
+        })
+    })
+})
+
+router.post('/addDiscount/:cid', (req, res) => {
+    var type = req.body.type
+    var disc = req.body.discount
+
+    if (type === "cash") {
+        CustomerInfo.findById(req.params.cid, (err, c) => {
+            if (err) {
+                throw err
+            }
             CustomerInfo.findByIdAndUpdate(req.params.cid, {
                 $set: {
-                    'jobcardInfo.status': 'repaired'
+                    'jobcardInfo.payment.final': c.jobcardInfo.payment.total - disc,
+                    'jobcardInfo.payment.discount.type': type,
+                    'jobcardInfo.payment.discount.amount': disc,                
                 }
-            }, {
-                upsert: true
             }, (err, done) => {
                 if (err) {
                     throw err
                 }
-                res.redirect('/staff/dashboard')
+                res.redirect('/staff/repairedView/'+c._id)
             })
-        } else {
-            res.redirect('back')
+        })
+    }
+    if (type === "percentage") {
+        CustomerInfo.findById(req.params.cid, (err, c) => {
+            if (err) {
+                throw err
+            }
+            var pdisc = (c.jobcardInfo.payment.total)*(disc/100)
+            CustomerInfo.findByIdAndUpdate(req.params.cid, {
+                $set: {
+                    'jobcardInfo.payment.final': c.jobcardInfo.payment.total - pdisc,
+                    'jobcardInfo.payment.discount.type': type,
+                    'jobcardInfo.payment.discount.amount': pdisc,                
+                }
+            }, (err, done) => {
+                if (err) {
+                    throw err
+                }
+                res.redirect('/staff/repairedView/'+c._id)
+            })
+        })
+    }
+})
+
+router.post('/addPendingPayment/:cid', (req, res) => {
+    CustomerInfo.findByIdAndUpdate(req.params.cid, {
+        $set: {
+            'jobcardInfo.payment.pending.amount': req.body.pp
         }
+    }, (err, done) => {
+        if (err) {
+            throw err
+        }
+        res.redirect('/staff/repairedView/'+req.params.cid)
     })
 })
 
@@ -767,6 +917,71 @@ router.get('/repairedCars', (req, res) => {
         res.render('staff/repairedCars', {
             title: 'Repaired Cars',
             customers: customers
+        })
+    })
+})
+
+// By Ankit @3/6/19
+router.get('/repairedView/:cid', (req, res) => {
+    var partsTotalPrice = parseInt(0)
+    var servicesTotalPrice = parseInt(0)
+    var lubricantsTotalPrice = parseInt(0)
+    var totalPrice = parseInt(0)
+    var partLabour = parseInt(0)
+    var serviceLabour = parseInt(0)
+    var lubricantLabour = parseInt(0)
+    CustomerInfo.findById(req.params.cid, (err, customer) => {
+        if (err) {
+            throw err
+        }
+        
+        for (let i = 0; i < customer.jobcardInfo.parts.length; i++) {
+            partsTotalPrice = partsTotalPrice + parseInt(customer.jobcardInfo.parts[i].price);  
+            if (customer.jobcardInfo.parts[i].repairFlag === "0") {
+                partLabour = partLabour + customer.jobcardInfo.parts[i].labour
+            }          
+        }
+        for (let i = 0; i < customer.jobcardInfo.services.length; i++) {
+            servicesTotalPrice = servicesTotalPrice + parseInt(customer.jobcardInfo.services[i].price); 
+            serviceLabour = serviceLabour + customer.jobcardInfo.services[i].labour           
+        }
+        for (let i = 0; i < customer.jobcardInfo.lubricants.length; i++) {
+            lubricantsTotalPrice = lubricantsTotalPrice + parseInt(customer.jobcardInfo.lubricants[i].price);   
+            lubricantLabour = lubricantLabour + parseInt(customer.jobcardInfo.lubricants[i].labour)         
+        }
+        totalPrice = partsTotalPrice + servicesTotalPrice + lubricantsTotalPrice + partLabour + serviceLabour + lubricantLabour      
+
+        res.render('staff/repairedView', {
+            title: 'repaired View',
+            customer: customer,
+            totalPrice: totalPrice
+        })
+    })
+})
+
+// ankit @3/6/2019
+router.get('/bill/:cid', (req, res) => {
+    CustomerInfo.findById(req.params.cid, (err, customer) => {
+        if (err) {
+            throw err
+        }
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if(dd<10) {
+            dd = '0'+dd
+        } 
+
+        if(mm<10) {
+            mm = '0'+mm
+        } 
+        todayDate = dd + '/' +mm + '/' + yyyy;
+        res.render('staff/bill', {
+            title: 'Bill',
+            customer: customer,
+            todayDate: todayDate
         })
     })
 })

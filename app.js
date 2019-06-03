@@ -6,8 +6,8 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var session = require('express-session');
 
-mongoose.connect('mongodb://heroku_s0n3f8q1:moh2qurgku94icehkbshr1t5n3@ds149616.mlab.com:49616/heroku_s0n3f8q1', () => {
-  // mongoose.connect('mongodb://localhost:27017/jobcard', (err) => {
+mongoose.connect('mongodb://heroku_s0n3f8q1:moh2qurgku94icehkbshr1t5n3@ds149616.mlab.com:49616/heroku_s0n3f8q1', (err) => {
+// mongoose.connect('mongodb://localhost:27017/jobcard', (err) => {
   if (err) {
     throw err
   }

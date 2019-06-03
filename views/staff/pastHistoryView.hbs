@@ -1,0 +1,140 @@
+<body>  
+    <main id="main">
+    <div class="container-95">
+    <div class="my-form" id="verify-static-details">
+        <div class="my-form-heading">
+            <h5>Name</h5>
+        </div>
+        <div class="row my-form-row">
+            <div class="col-md-6">
+                <table class="table table-striped table-bordered customer-verification-info-table">
+                    <tbody>
+                        <tr>
+                            <th>Vehicle Number:</th>
+                            <td>{{customer.vehicleInfo.vehicleNumber}}</td>
+                        </tr>
+                        <tr>
+                            <th>Customer Name:</th>
+                            <td>{{customer.name}}</td>
+                        </tr>
+                        <tr>
+                            <th>Contact No.:</th>
+                            <td>{{customer.contact.phone}}</td>
+                        </tr>                                        
+                        <tr>
+                            <th>Car Name:</th>
+                            <td>{{customer.vehicleInfo.company.name}} {{customer.vehicleInfo.model.name}}</td>
+                        </tr>
+                        <tr>
+                            <th> VIN no</th>
+                            <td>{{customer.vehicleInfo.VIN}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-striped table-bordered customer-verification-info-table">
+                    <tbody>
+                        <tr>
+                            <th>PastHistory Date:</th>
+                            <td>{{history.delivery.date}}</td>
+                        </tr>
+                        <tr>
+                            <th>Running Km</th>
+                            <td>{{history.runningKM}}</td>
+                        </tr>
+                        <tr>
+                            <th>Jobcard No.:</th>
+                            <td>{{history.jobcardNumber}}</td>
+                        </tr>
+                        <tr>
+                            <th>Work Type</th>
+                            <td>{{history.workType}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4">
+                <h6 style="margin-left:7px;">Parts</h6>
+                <table class="table table-striped table-bordered customer-verification-info-table">
+                    <tbody>
+                        <tr>
+                            <th>Sr.No</th>
+                            <th>Name</th> 
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                        {{#each history.parts}}
+                        <tr>                        
+                            <td>{{@index}}</td>
+                            <td>{{this.name}}</td>
+                            <td>{{this.quantity}}</td>
+                            <td>{{this.price}}</td>                        
+                        </tr>
+                        {{/each}}			
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <h6>Services</h6>
+        <table class="table table-striped table-bordered customer-verification-info-table">
+            <tbody>
+                <tr>
+                    <th>Sr.No</th>
+                    <th>Name</th>
+                    <th>Price</th>                                        
+                </tr>
+                {{#each history.services}}
+                    <tr>
+                        <td>{{@index}}</td>
+                        <td>{{this.name}}</td>
+                        <td>{{this.price}}</td>
+                    </tr>
+                {{/each}}
+               </tr>
+
+           </tbody>
+       </table>
+   </div>
+   <div class="col-md-4">
+    <h6>Lubricants</h6>
+    <table class="table table-striped table-bordered customer-verification-info-table">
+        <tbody>
+            <tr>
+                <th>Sr.No</th>
+                <th>Name</th> 
+                <th>Price</th>
+            </tr>
+            {{#each history.lubricants}}
+                <tr>
+                    <td>{{@index}}</td>
+                    <td>{{this.name}}</td>
+                    <td>{{this.price}}</td>
+                </tr>
+            {{/each}}
+       </tr>
+
+   </tbody>
+</table>
+</div>
+<div class="col-md-6">
+                        <label for="ddate" style="margin-left: 8px;"><b>Delivery Date:{{history.delivery.date}}</label><br>
+                        <label for="toalamount" style="margin-left: 8px;"><b>Total Amount: {{history.payment.total}} </b></label><br>
+                        <label for="toalamount" style="margin-left: 8px;"><b>Final Amount: {{history.payment.final}} </b></label><br>
+                        <label for="toalamount" style="margin-left: 8px;"><b>Pending Payment Amount: {{history.payment.pending.amount}}</b></label>                                                
+                    </div>          
+                    <label for="dtime" style="margin-left: 8px;"><b>Delivery Time:{{history.delivery.time }}
+                        
+                    </label>
+    </div>  
+
+    <div class="row">
+        <div class="col-md"></div>
+        <div class="col-md-2">
+           
+            <a class="btn btn-secondary my-btn btn-lg" href="/staff/pastHistory/{{customer._id}}" >Close</a>
+        </div>
+        <div class="col-md"></div>
+    </div>
+</div>
+</main>

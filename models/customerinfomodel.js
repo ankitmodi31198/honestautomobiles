@@ -127,6 +127,94 @@ var CustomerInfo = new Schema({
                 amount: Number
             }
         }
+    },
+    history: {
+        type: Array,
+        jobcardNumber: String,        
+        workType: String,
+        arrival: {
+            date: Date,
+            time: String
+        },
+        delivery: {
+            date: Date,
+            time: String
+        },
+        availableFuel: Number,
+        runningKM: Number,
+        status: String,
+        customerComplain: {
+            type: Array,
+            complain: String
+        },
+        advisorSolution: {
+            type: Array,
+            description: String,
+            price: Number
+        },
+        accessories: {
+            serviceBook: String,
+            toolKit: String,
+            spareWheel: String,
+            jack: String,
+            jackHandle: String,
+            carPerfume: String,
+            clock: String,
+            stereo: String,
+            CDPlayer: String,
+            mouthPieces: String,
+            CDChanger: String,
+            idols: Number,
+            wheelCover: Number,
+            wheelCap: Number,
+            mudFlaps: Number,
+            dickyMat: Number,
+            cigaretteLighter: String,
+            speakerRR: Number,
+            speakerFR: Number,
+            tweeters: Number,
+            exlWarranty: String
+        },
+    
+        parts: {
+            type: Array,
+            name: String,
+            partId: String,            
+            price: String,
+            quantity: Number,
+            repairFlag: Boolean,
+            labour: Number,
+            status: String
+        },
+        services: {
+            type: Array,
+            name: String,
+            serviceId: String,
+            details: String,
+            price: Number,
+            labour: Number,
+            status: String
+        },
+        lubricants: {
+            type: Array,
+            name: String,
+            lubricantId: String,
+            price: String,
+            labour: Number,
+            status: String
+        },
+    
+        payment: {
+            total: Number,
+            discount: {
+                type: String,
+                amount: Number
+            },
+            final: Number,
+            pending: {
+                amount: Number
+            }
+        }
     }
 }, {
     timestamps: true

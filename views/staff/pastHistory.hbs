@@ -1,0 +1,95 @@
+<body>
+    <!-- Sidebar -->
+    <div class="w3-sidebar w3-light-grey w3-bar-block" style="width:20%">
+        <h3 class="w3-bar-item">Menu</h3>
+        <a href="../staff/dashboard" class="w3-bar-item w3-button">Dashboard</a>
+        <a href="#" class="w3-bar-item w3-button">Search Customer</a>
+        <a href="#" class="w3-bar-item w3-button">Logout</a>
+    </div>
+
+    <!-- Page Content -->
+    <div style="margin-left:20%">
+
+        <div class="w3-container dashboard-header">
+          <h3>JCMS</h3>
+        </div>
+
+        <!-- breadcrumbs at top of the page -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../staff/dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">PassHistoy Cars list</li>
+            </ol>
+        </nav>    
+        <!-- dashboard -->
+        <div class="my-dashboard">
+            <div class="my-dashboard-header">
+                <center>
+                    <h4>{{customer.vehicleInfo.vehicleNumber}}</h4>
+                </center>
+            </div>
+        </div>
+		<div class="container mt-5">
+	   		<table id="data-table-simple-1" class="table">
+			   	<thead style="text-align: center; font-size: 14px;">
+			   		<tr>
+			   			<th>Customer Name</th>
+			   			<th>Date</th>
+			   			<th>Running KM</th>
+			   			<th>Service Type </th>	
+			   			<th>Action</th>
+			   		</tr>
+			   	</thead>
+			   	<tbody style="font-size: 12px; text-align: center;">
+			   		{{#each customer.history}}
+                        <tr>
+                            <td>{{../customer.name}}</td>
+                            <td>{{this.delivery.date}}</td>
+                            <td>{{this.runningKM}}</td>
+                            <td>{{this.workType}}</td>
+                            <td><a href='/staff/pastHistoryView/{{../customer._id}}/{{@index}}'>View</a></td>
+                        </tr>	 
+                    {{/each}}
+			   	</tbody>
+	   		</table>
+		</div>        
+		<div class="w3-container" style="margin-left: 400px; margin-top: 100px;">
+		  <a href='/staff/customerVerification' class="w3-button w3-xlarge w3-circle w3-black" style="text-decoration: none;">+</a>Add New JobCard
+		</div>
+    </div>
+    
+
+    <!-- jslink.html -->
+    <script>
+        function w3_open() {
+            // document.getElementById("main").style.marginLeft = "25%";
+            document.getElementById("mySidebar").style.width = "25%";
+            document.getElementById("mySidebar").style.display = "block";
+            // document.getElementById("openNav").style.display = 'none';
+        }
+        function w3_close() {
+            // document.getElementById("main").style.marginLeft = "0%";
+            document.getElementById("mySidebar").style.display = "none";
+            // document.getElementById("openNav").style.display = "inline-block";
+        }
+    </script>
+
+    <script>
+        var vsd = document.getElementById("verify-static-details");
+        var ef = document.getElementById("edit-form");
+
+        ef.style.display = "none";
+        function editButtonClicked() {           
+
+            vsd.style.display = "none";
+            ef.style.display = "block";
+        }
+        function cancelButtonClicked() {
+            vsd.style.display = "block";
+            ef.style.display = "none";
+        }
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>    
+ </body>

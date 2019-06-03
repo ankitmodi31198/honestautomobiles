@@ -44,7 +44,7 @@
             {
                 for(var i = 0; i < response.length; i++)
                 {                    
-                    $('#addedLubricants').append('<tr><td>'+response[i].name+'</td><td>'+response[i].price+'</td><td><button class="btn btn-danger btn-sm" onclick="removePart(\''+response[i].lubricantId+'\', \''+customerId+'\')">Remove</button></td></tr>')
+                    $('#addedLubricants').append('<tr><td>'+response[i].name+'</td><td>'+response[i].price+'</td><td><button class="btn btn-danger btn-sm" onclick="removeLubricant(\''+response[i].lubricantId+'\', \''+customerId+'\')">Remove</button></td></tr>')
                 }
             }
         })
@@ -64,7 +64,40 @@
                 }
             }
         })
-    }    
+    }
+    function serviceAdd(serviceId)
+    {
+        var customerId = document.getElementById('customerId').value
+        $('#addedServices').empty()
+        $.ajax({
+            type: "POST",
+            url: "/staff/addService/"+serviceId+'/'+customerId,
+            cache: false,
+            success: function(response)
+            {
+                for(var i = 0; i < response.length; i++)
+                {
+                    $('#addedServices').append('<tr><td>'+response[i].name+'</td><td>'+response[i].price+'</td><td><button class="btn btn-danger btn-sm" onclick="removeService(\''+response[i].serviceId+'\',\''+customerId+'\')">Remove</button></td></tr>')
+                }
+            }
+        })
+    } 
+    function removeService(serviceId, customerId)
+    {        
+        $('#addedServices').empty()
+        $.ajax({
+            type: "POST",
+            url: "/staff/removeService/"+serviceId+'/'+customerId,
+            cache: false,
+            success: function(response)
+            {
+                for(var i = 0; i < response.length; i++)
+                {                    
+                    $('#addedServices').append('<tr><td>'+response[i].name+'</td><td>'+response[i].price+'</td><td><button class="btn btn-danger btn-sm" onclick="removeService(\''+response[i].serviceId+'\',\''+customerId+'\')">Remove</button></td></tr>')
+                }
+            }
+        })
+    }   
 </script>
 <input type="hidden" value="{{customer._id}}" id="customerId">
 <!-- Page Content -->
@@ -220,7 +253,7 @@
                         <tr>                    
                         <td data-toggle="tooltip" data-placement="bottom" title="{{this.details}}" >{{this.name}}</td>
                         <td>{{this.price}}</td>
-                        <td><a href="javascript:void(0)" onclick="serviceAdd('{{this._id}}','{{customer.jobcardInfo.jobcardNumber}}')"> + </a></td>
+                        <td><a href="javascript:void(0)" onclick="serviceAdd('{{this._id}}')"> + </a></td>
                         </tr>           
                     {{/each}}
                 </tbody>
@@ -269,7 +302,7 @@
                     </tbody>
                 </table>     
             </div>
-            <div class="col-md-4" id="addedServices">
+            <div class="col-md-4" id="">
                 <table id="data-table-simple-5" class="table table-striped">
                     <thead>
                         <th>Name</th>
@@ -277,7 +310,7 @@
                         <th>Price</th>
                         <th>Remove</th>
                     </thead>
-                    <tbody>
+                    <tbody id="addedServices">
                         <!-- data -->
                     </tbody>
                 </table>

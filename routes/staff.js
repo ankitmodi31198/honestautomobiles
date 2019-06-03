@@ -10,6 +10,17 @@ var Services = require('../models/servicemodel')
 var Lubricants = require('../models/lubricantmodel')
 var UniqueNumber = require('unique-number')
 var uniqueNumber = new UniqueNumber();
+var ObjectId = require('mongoose').Types.ObjectId;
+
+var nodemailer = require('nodemailer');
+
+// var transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     auth: {
+//       user: 'vgecit2020@gmail.com',
+//       pass: '16017011600132'
+//     }
+// });
 
 // get dashboard
 router.get('/dashboard', (req, res) => {
@@ -54,13 +65,15 @@ router.post('/checkVehicle', (req, res) => {
 
     CustomerInfo.findOne({
         'vehicleInfo.vehicleNumber': vehicleNumber
-    }, (err, data) => {
+    }, (err, customer) => {
         if (err) {
             throw err
         }
 
-        if (data) {
+        if (customer) {
             // redirect to allocate page
+            req.session.registeredCustomerId = customer._id
+            res.redirect('/staff/pastHistory/'+customer._id)
         } else {
             // redirect to register page
             req.session.vehicleNumber = vehicleNumber
@@ -129,7 +142,6 @@ router.post('/addCustomer', (req, res) => {
                     customer.vehicleInfo.model.name = modelName
                     customer.vehicleInfo.varient.varientId = req.body.model_varient
                     customer.vehicleInfo.varient.name = varientName
-                    customer.jobcardInfo.jobcardNumber = uniqueNumber.generate();
 
                     customer.save((err, done) => {
                         if (err) {
@@ -145,26 +157,28 @@ router.post('/addCustomer', (req, res) => {
 })
 
 router.get('/customerVerification', (req, res) => {
-    var customerId = req.session.registeredCustomerId
-
+    var customerId = req.session.registeredCustomerId    
     CustomerInfo.findById(customerId, (err, customer) => {
         if (err) {
             throw err
-        }
+        }      
+        var companyId = new ObjectId(customer.vehicleInfo.company.companyId)
+        var modelId = new ObjectId(customer.vehicleInfo.model.modelId)
+        var varientId = new ObjectId(customer.vehicleInfo.varient.varientId)      
         Company.findOne({
-            _id: customer.vehicleInfo.company.companyId
+            _id: companyId
         }, (err, company) => {
             if (err) {
                 throw err
             }
             Model.findOne({
-                _id: customer.vehicleInfo.model.modelId
+                _id: modelId
             }, (err, model) => {
                 if (err) {
                     throw err
                 }
                 Varient.findOne({
-                    _id: customer.vehicleInfo.varient.varientId
+                    _id: varientId
                 }, (err, varient) => {
                     if (err) {
                         throw err
@@ -219,7 +233,8 @@ router.post('/updateCustomer/:cid', (req, res) => {
 router.get('/updateArrival/:cid', (req, res) => {
     CustomerInfo.findByIdAndUpdate(req.params.cid, {
         $set: {
-            'jobcardInfo.status': 'arrival'
+            'jobcardInfo.status': 'arrival',                    
+            'jobcardInfo.jobcardNumber': uniqueNumber.generate() 
         }
     }, (err, done) => {
         if (err) {
@@ -601,6 +616,43 @@ router.post('/addLubricant/:lid/:cid', (req, res) => {
     })
 })
 
+// ajax for add service
+router.post('/addService/:sid/:cid', (req, res) => {
+    var sid = req.params.sid
+    var cid = req.params.cid
+    
+    Services.findById(sid, (err, service) => {
+        if (err) {
+            throw err
+        }
+        CustomerInfo.findByIdAndUpdate(cid, {
+            $push: {
+                'jobcardInfo.services': {
+                    'name': service.name,
+                    'serviceId': sid,
+                    'details': service.details,
+                    'price': service.price,
+                    'status': 'pending',
+                    'labour': service.labour
+                }
+            }
+        }, {
+            upsert: true
+        }, (err, done) => {
+            if (err) {
+                throw err
+            }
+            console.log(done)
+            CustomerInfo.findById(cid, (err, customer) => {
+                if (err) {
+                    throw err
+                }
+                res.send(customer.jobcardInfo.services)
+            })
+        })
+    })
+})
+
 // ajax for removing part
 router.post('/removeLubricant/:lid/:cid', (req, res) => {
     CustomerInfo.findByIdAndUpdate(req.params.cid, {
@@ -645,6 +697,32 @@ router.post('/removePart/:pid/:cid', (req, res) => {
                 throw err
             }
             res.send(customer.jobcardInfo.parts)
+        })
+    })
+})
+// ajax for removing service
+router.post('/removeService/:sid/:cid', (req, res) => {
+    var sid = req.params.sid
+    var cid = req.params.cid
+
+    CustomerInfo.findByIdAndUpdate(req.params.cid, {
+        $pull: {
+            'jobcardInfo.services': {
+                'serviceId': sid
+            }
+        }
+    }, {
+        upsert: true
+    }, (err, done) => {
+        if (err) {
+            throw err
+        }
+        console.log(done.jobcardInfo.services)
+        CustomerInfo.findById(cid, (err, customer) => {
+            if (err) {
+                throw err
+            }
+            res.send(customer.jobcardInfo.services)
         })
     })
 })
@@ -735,6 +813,7 @@ router.get('/updateStatus/:cid', (req, res) => {
 router.post('/updateStatus/:cid', (req, res) => {
     var parts = req.body.parts
     var lubricants = req.body.lubricants
+    var services = req.body.services
 
     console.log(parts)
     console.log(lubricants)
@@ -773,6 +852,23 @@ router.post('/updateStatus/:cid', (req, res) => {
             })
         }
     }
+    if (services != null) {
+        for (let i = 0; i < services.length; i++) {
+            const service = services[i];
+            console.log(service)
+    
+            CustomerInfo.findOneAndUpdate({
+                '_id': req.params.cid,
+                'jobcardInfo.services.serviceId': service
+            }, {
+                'jobcardInfo.services.$.status': 'completed'
+            }, (err, done) => {
+                if (err) {
+                    throw err
+                }        
+            })
+        }
+    }
     
     CustomerInfo.count({
         'jobcardInfo.parts.status': 'pending'
@@ -786,65 +882,68 @@ router.post('/updateStatus/:cid', (req, res) => {
             if (err) {
                 throw err
             }
-
-            if (pendingPartCount === 0  && pendingLubricantCount === 0) {
-                CustomerInfo.findOneAndUpdate({
-                    _id: req.params.cid
-                }, {
-                    'jobcardInfo.status': 'repaired'
-                }, (err, done) => {
-                    if (err) {
-                        throw err
-                    }
-                    
-                    
-                    var partsTotalPrice = parseInt(0)
-                    var servicesTotalPrice = parseInt(0)
-                    var lubricantsTotalPrice = parseInt(0)
-                    var totalPrice = parseInt(0)
-                    var partLabour = parseInt(0)
-                    var serviceLabour = parseInt(0)
-                    var lubricantLabour = parseInt(0)
-                    CustomerInfo.findById(req.params.cid, (err, customer) => {
+            CustomerInfo.count({
+                'jobcardInfo.services.status': 'pending'
+            }, (err, pendingServiceCount) => {
+                if (err) {
+                    throw err
+                }
+                if (pendingPartCount === 0  && pendingLubricantCount === 0 && pendingServiceCount === 0) {
+                    CustomerInfo.findOneAndUpdate({
+                        _id: req.params.cid
+                    }, {
+                        'jobcardInfo.status': 'repaired'
+                    }, (err, done) => {
                         if (err) {
                             throw err
                         }
                         
-                        for (let i = 0; i < customer.jobcardInfo.parts.length; i++) {
-                            partsTotalPrice = partsTotalPrice + parseInt(customer.jobcardInfo.parts[i].price);  
-                            if (customer.jobcardInfo.parts[i].repairFlag === "0") {
-                                partLabour = partLabour + customer.jobcardInfo.parts[i].labour
-                            }          
-                        }
-                        for (let i = 0; i < customer.jobcardInfo.services.length; i++) {
-                            servicesTotalPrice = servicesTotalPrice + parseInt(customer.jobcardInfo.services[i].price); 
-                            serviceLabour = serviceLabour + customer.jobcardInfo.services[i].labour           
-                        }
-                        for (let i = 0; i < customer.jobcardInfo.lubricants.length; i++) {
-                            lubricantsTotalPrice = lubricantsTotalPrice + parseInt(customer.jobcardInfo.lubricants[i].price);   
-                            lubricantLabour = lubricantLabour + parseInt(customer.jobcardInfo.lubricants[i].labour)         
-                        }
-                        totalPrice = partsTotalPrice + servicesTotalPrice + lubricantsTotalPrice + partLabour + serviceLabour + lubricantLabour      
                         
-                        CustomerInfo.findByIdAndUpdate(req.params.cid, {
-                            $set: {
-                                'jobcardInfo.payment.total': totalPrice,
-                                'jobcardInfo.payment.final': totalPrice
-                            }
-                        }, (err, done) => {
+                        var partsTotalPrice = parseInt(0)
+                        var servicesTotalPrice = parseInt(0)
+                        var lubricantsTotalPrice = parseInt(0)
+                        var totalPrice = parseInt(0)
+                        var partLabour = parseInt(0)
+                        var serviceLabour = parseInt(0)
+                        var lubricantLabour = parseInt(0)
+                        CustomerInfo.findById(req.params.cid, (err, customer) => {
                             if (err) {
                                 throw err
                             }
-                            res.render('staff/repairedView', {
-                                title: 'repaired View',
-                                customer: customer
-                            })
-                        })                        
+                            
+                            for (let i = 0; i < customer.jobcardInfo.parts.length; i++) {
+                                partsTotalPrice = partsTotalPrice + parseInt(customer.jobcardInfo.parts[i].price);  
+                                if (customer.jobcardInfo.parts[i].repairFlag === "0") {
+                                    partLabour = partLabour + customer.jobcardInfo.parts[i].labour
+                                }          
+                            }
+                            for (let i = 0; i < customer.jobcardInfo.services.length; i++) {
+                                servicesTotalPrice = servicesTotalPrice + parseInt(customer.jobcardInfo.services[i].price); 
+                                serviceLabour = serviceLabour + customer.jobcardInfo.services[i].labour           
+                            }
+                            for (let i = 0; i < customer.jobcardInfo.lubricants.length; i++) {
+                                lubricantsTotalPrice = lubricantsTotalPrice + parseInt(customer.jobcardInfo.lubricants[i].price);   
+                                lubricantLabour = lubricantLabour + parseInt(customer.jobcardInfo.lubricants[i].labour)         
+                            }
+                            totalPrice = partsTotalPrice + servicesTotalPrice + lubricantsTotalPrice + partLabour + serviceLabour + lubricantLabour      
+                            
+                            CustomerInfo.findByIdAndUpdate(req.params.cid, {
+                                $set: {
+                                    'jobcardInfo.payment.total': totalPrice,
+                                    'jobcardInfo.payment.final': totalPrice
+                                }
+                            }, (err, done) => {
+                                if (err) {
+                                    throw err
+                                }
+                                res.redirect('/staff/dashboard')
+                            })                        
+                        })
                     })
-                })
-            } else {
-                res.redirect('back')
-            }
+                } else {
+                    res.redirect('back')
+                }
+            })            
         })
     })
 })
@@ -984,6 +1083,99 @@ router.get('/bill/:cid', (req, res) => {
             todayDate: todayDate
         })
     })
+})
+
+router.post('/closeCar', (req, res) => {
+    var cid = req.body.customerId
+
+    CustomerInfo.findById(cid, (err, customer) => {
+        if (err) {
+            throw err
+        }
+        CustomerInfo.findByIdAndUpdate(cid, {
+            $push: {
+                'history': customer.jobcardInfo
+            }
+        }, {
+            upsert: true
+        }, (err, done) => {
+            if (err) {
+                throw err
+            }
+            CustomerInfo.findByIdAndUpdate(cid, {
+                $unset: {
+                    'jobcardInfo': true
+                }
+            }, {
+                upsert: true
+            }, (err, done) => {
+                if (err) {
+                    throw err
+                }
+                res.redirect('/staff/dashboard')
+            })
+        })
+    })
+})
+
+router.get('/pastHistory/:cid', (req, res) => {
+    CustomerInfo.findById(req.params.cid, (err, customer) => {
+        if (err) {
+            throw err
+        }
+        res.render('staff/pastHistory', {
+            title: 'History',
+            customer: customer
+        })
+    })
+})
+
+router.get('/pastHistoryView/:cid/:hindex', (req, res) => {
+    var cid = new ObjectId(req.params.cid)
+    CustomerInfo.findOne({
+        '_id': cid
+    }, (err, customer) => {
+        if (err) {
+            throw err
+        }        
+        res.render('staff/pastHistoryView', {
+            title: 'History',
+            customer: customer,
+            history: customer.history[req.params.hindex],
+            hindex: req.params.hindex
+        })
+    })
+})
+
+router.get('/mail', (req, res) => {
+    var nodemailer = require('nodemailer');
+
+    var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'convorangroot.gh05@gmail.com',
+        pass: 'convogh05'
+    }
+    });
+
+    var mailOptions = {
+    from: 'convorangroot.gh05@gmail.com',
+    to: 'ankitmodi31198@gmail.com',
+    subject: 'Sending Email using Node.js',
+    html: '<h1>Welcome</h1><p>That was easy!</p>',
+    attachments: [
+        {   // utf-8 string as an attachment
+            filename: 'text1.pdf',
+        }]
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+        console.log(error);
+    } else {
+        console.log('Email sent: ' + info.response);
+    }
+    });
 })
 
 module.exports = router;

@@ -11,16 +11,16 @@ var Lubricants = require('../models/lubricantmodel')
 var UniqueNumber = require('unique-number')
 var uniqueNumber = new UniqueNumber();
 var ObjectId = require('mongoose').Types.ObjectId;
-
+// mail
 var nodemailer = require('nodemailer');
+// pdf
+const puppeteer = require('puppeteer')
+const fs = require('fs')
+const hbs = require('handlebars')
+const path = require('path')
+const moment = require('moment')
 
-// var transporter = nodemailer.createTransport({
-//     service: 'gmail',
-//     auth: {
-//       user: 'vgecit2020@gmail.com',
-//       pass: '16017011600132'
-//     }
-// });
+
 
 // get dashboard
 router.get('/dashboard', (req, res) => {
@@ -1112,12 +1112,44 @@ router.post('/closeCar', (req, res) => {
                 if (err) {
                     throw err
                 }
-                res.redirect('/staff/dashboard')
+
+                createBillPdf(cid)
+
+
+                var nodemailer = require('nodemailer');
+
+                var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'convorangroot.gh05@gmail.com',
+                    pass: 'convogh05'
+                }
+                });
+
+                var mailOptions = {
+                from: 'convorangroot.gh05@gmail.com',
+                to: 'ankitmodi31198@gmail.com',
+                subject: 'Bill',
+                html: '',
+                attachments: [
+                    {   // utf-8 string as an attachment
+                        path: './PDF/bill/'+cid+'.pdf'
+                    }]
+                };
+
+                transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                    
+                }
+            });
+            res.redirect('/staff/dashboard')
             })
         })
     })
 })
-
 router.get('/pastHistory/:cid', (req, res) => {
     CustomerInfo.findById(req.params.cid, (err, customer) => {
         if (err) {
@@ -1165,7 +1197,7 @@ router.get('/mail', (req, res) => {
     html: '<h1>Welcome</h1><p>That was easy!</p>',
     attachments: [
         {   // utf-8 string as an attachment
-            filename: 'text1.pdf',
+            path: './PDF/bill/5cf5bab55cea241ad83eced9.pdf'
         }]
     };
 
@@ -1177,5 +1209,27 @@ router.get('/mail', (req, res) => {
     }
     });
 })
+
+
+
+
+const createBillPdf = async (id) => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    const options = {
+        path: 'PDF/bill/'+id+'.pdf',
+        format: 'A4',
+    };
+
+
+        await page.goto('http://honestgarage.herokuapp.com/staff/bill/'+id, {waitUntil: 'networkidle2'});
+    
+
+    
+    await page.pdf(options);
+
+    await browser.close();
+}
+
 
 module.exports = router;

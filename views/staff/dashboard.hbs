@@ -1,11 +1,12 @@
 <!-- Sidebar -->
+<!-- Hiren Changes -->
 <div class="w3-sidebar w3-light-grey w3-bar-block" style="width:20%">
 	<h3 class="w3-bar-item">Menu</h3>
 	<a href="/staff/dashboard" class="w3-bar-item w3-button">Dashboard</a>
 	<a href="/staff/search" class="w3-bar-item w3-button">Search Customer</a>
-	{{!-- <a href="serviceadvisorlist.jsp" class="w3-bar-item w3-button">Service Advisor List</a>
-	<!-- <a href="servicedetails.jsp" class="w3-bar-item w3-button">Service Details</a> -->
-	<a href="receptionistPR.jsp" class="w3-bar-item w3-button">Reports</a> --}}
+	<a href="/staff/arrivalCars" class="w3-bar-item w3-button">Arrival Cars</a>
+	<a href="/staff/pendingCars" class="w3-bar-item w3-button">Pending Cars</a>
+	<a href="/staff/repairedCars" class="w3-bar-item w3-button">Repaired Cars</a>
 </div>
 
 <!-- Page Content -->
@@ -16,7 +17,7 @@
 				<a href="/staff/dashboard" class="navbar-logo-link">JCMS</a> 
 		</span>
 		<div class="navbar-userpart">
-				<span class="navbar-userpart-username">Welcome, Admin | </span> <span><a href="">logout</a></span>
+				<span class="navbar-userpart-username">Welcome, Staff | </span> <span><a href="">logout</a></span>
 		</div>
 </div>
         
@@ -32,15 +33,16 @@
 <div class="my-dashboard">
 	<div class="my-dashboard-header">
 			<center>
-					<h4>Receptionist Dashboard</h4>
+					<h4>Staff Dashboard</h4>
 			</center>
 	</div>
-	
+	<br>
+	<br>
 					
 	<div class="col-md-3 widget widget1">
 		<div class="r3_counter_box">
 			<a href="/staff/search" class="my-dashboard-box-link">
-				<i class="fa fa-car"></i>
+				<i class="fa fa-search"></i>
 				<div class="stats">
 					<h5 class='' >&nbsp;<span></span></h5>
 					<div class="grow grow1">
@@ -49,6 +51,8 @@
 				</div>
 			</a>
 		</div>
+	</div>
+	<div class="col-md-3 widget widget1">
 		<div class="r3_counter_box">
 			<a href="/staff/arrivalCars" class="my-dashboard-box-link">
 				<i class="fa fa-car"></i>
@@ -60,9 +64,11 @@
 				</div>
 			</a>	
 		</div>
+	</div>
+		<div class="col-md-3 widget widget1">
 		<div class="r3_counter_box">
 			<a href="/staff/pendingCars" class="my-dashboard-box-link">
-				<i class="fa fa-car"></i>
+				<i class="fa fa-wrench"></i>
 				<div class="stats">
 					<h5 class='' >&nbsp;<span></span></h5>
 					<div class="grow grow1">
@@ -71,9 +77,11 @@
 				</div>
 			</a>
 		</div>
+		</div>
+		<div class="col-md-3 widget widget1">
 		<div class="r3_counter_box">
 			<a href="/staff/repairedCars" class="my-dashboard-box-link">
-				<i class="fa fa-car"></i>
+				<i class="fa fa-check-square"></i>
 				<div class="stats">
 					<h5 class='' >&nbsp;<span></span></h5>
 					<div class="grow grow1">
@@ -84,4 +92,4 @@
 		</div>
 	</div> 
 </div>
-  
+  </div>

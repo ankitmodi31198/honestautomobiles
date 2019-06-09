@@ -1,6 +1,35 @@
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js">
+	function print() {
+		var pdf = new jsPDF('p', 'pt', 'letter');
+        source = $('#content')[0];
+        specialElementHandlers = {
+            '#bypassme': function (element, renderer) {
+                return true
+            }
+        };
+        margins = {
+            top: 80,
+            bottom: 60,
+            left: 40,
+            width: 522
+        };
+        pdf.fromHTML(
+        source,
+        margins.left, 
+        margins.top, { 
+            'width': margins.width, 
+            'elementHandlers': specialElementHandlers
+        },
+        function (dispose) {
+            pdf.save('Jobcard.pdf');
+        }, margins);
+    }
+</script>
+
 <body style="background-color:#ffe6e6";>
     
 <a href="/staff/dashboard" class="btn btn-sm btn-secondary">Dashboard</a>
+<button onclick="print()" class="btn btn-sm btn-secondary">Print</button>
 <div class="container">
 		<div>
 			<div class="row">
@@ -100,11 +129,10 @@
 		                                        </tr>                                                
 		                                    	{{#each customer.jobcardInfo.customerComplain}}
 		                                      	<tr>
-		                                        	<td></td>
+		                                        	<td>{{@index}}</td>
 		                                        	<td clospan=3>{{this.complain}}</td>
 		                                        </tr>
 		                                        {{/each}}
-		                                        
 		                                    </tbody>
 		                    </table>
 		                </div>
@@ -121,7 +149,7 @@
 		                                        </tr>
 		                                        {{#each customer.jobcardInfo.advisorSolution}}
 		                                      	<tr>
-		                                        	<td></td>
+		                                        	<td>{{@index}}</td>
 		                                        	<td>{{this.description}}</td>
 		                                        	<td>{{this.price}}</td>
 		                                        </tr>

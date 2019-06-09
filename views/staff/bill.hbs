@@ -13,6 +13,34 @@
 	margin-right: 30px;
 }
 </style>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js">
+	function print() {
+		var pdf = new jsPDF('p', 'pt', 'letter');
+        source = $('#content')[0];
+        specialElementHandlers = {
+            '#bypassme': function (element, renderer) {
+                return true
+            }
+        };
+        margins = {
+            top: 80,
+            bottom: 60,
+            left: 40,
+            width: 522
+        };
+        pdf.fromHTML(
+        source,
+        margins.left, 
+        margins.top, { 
+            'width': margins.width, 
+            'elementHandlers': specialElementHandlers
+        },
+        function (dispose) {
+            pdf.save('Bill1.pdf');
+        }, margins);
+    }
+</script>
+
 
 </head>
 <body>
@@ -227,7 +255,8 @@
 				<center>
 					<input type="hidden" name="customerId" value="{{customer._id}}">					
 					{{!-- <input type="hidden" name="id" value=4 /> --}}
-					<input type="submit" value="Pay & Genarate Pdf" />
+					<input type="submit" value="Pay & Genarate Pdf" onclick="print()" />
+
 				</center>
 			</form>
 			

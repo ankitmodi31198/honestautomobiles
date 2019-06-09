@@ -17,6 +17,7 @@
     "hbs-mailer": "^0.4.1",
     "http-errors": "~1.6.2",
     "http-msgs": "^1.0.9",
+    "jspdf": "^1.5.3",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "mongoose": "^5.5.11",

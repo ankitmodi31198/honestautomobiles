@@ -15,10 +15,12 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var nodemailer = require('nodemailer');
 // pdf
 const puppeteer = require('puppeteer')
-const fs = require('fs')
-const hbs = require('handlebars')
-const path = require('path')
-const moment = require('moment')
+// const fs = require('fs')
+// const hbs = require('handlebars')
+// const path = require('path')
+// const moment = require('moment')
+const CONSTANTS = require('../globals').constants;
+const getFormatedDate = CONSTANTS.getFormatedDate;
 
 
 
@@ -423,9 +425,9 @@ router.post('/saveJobcardForm/:cid', (req, res) => {
     CustomerInfo.findByIdAndUpdate(req.params.cid, {
         $set: {            
             'jobcardInfo.workType': req.body.work_type,
-            'jobcardInfo.arrival.date': req.body.arrival_date,
+            'jobcardInfo.arrival.date': getFormatedDate(new Date(req.body.arrival_date)),
             'jobcardInfo.arrival.time': req.body.arrival_time,
-            'jobcardInfo.delivery.date': req.body.delivery_date,
+            'jobcardInfo.delivery.date': getFormatedDate(new Date(req.body.delivery_date)),
             'jobcardInfo.delivery.time': req.body.delivery_time,
             'jobcardInfo.runningKM': req.body.running_km,
             'jobcardInfo.availableFuel': req.body.available_fuel,

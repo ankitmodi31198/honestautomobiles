@@ -45,11 +45,13 @@ var CustomerInfo = new Schema({
         jobcardNumber: String,        
         workType: String,
         arrival: {
-            date: Date,
+            // date: Date,
+            date: String,
             time: String
         },
         delivery: {
-            date: Date,
+            // date: Date,
+            date: String,
             time: String
         },
         availableFuel: Number,
@@ -133,11 +135,13 @@ var CustomerInfo = new Schema({
         jobcardNumber: String,        
         workType: String,
         arrival: {
-            date: Date,
+            // date: Date,
+            date: String,
             time: String
         },
         delivery: {
-            date: Date,
+            // date: Date,
+            date: String,
             time: String
         },
         availableFuel: Number,

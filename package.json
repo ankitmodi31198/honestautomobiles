@@ -19,7 +19,6 @@
     "http-msgs": "^1.0.9",
     "jspdf": "^1.5.3",
     "lodash": "^4.17.11",
-    "moment": "^2.24.0",
     "mongoose": "^5.5.11",
     "morgan": "~1.9.0",
     "nodemailer": "^6.2.1",

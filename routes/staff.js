@@ -299,7 +299,7 @@ router.post('/saveCarImage/:cid/:jcn', (req, res) => {
     //console.log(imagedata);
 
 
-    ba64.writeImageSync("images/" + cid + jcn, imagedata); // Saves myimage.jpeg.
+    ba64.writeImageSync("dentImages/" + cid + jcn, imagedata); // Saves myimage.jpeg.
     var path = "dentImages/" + cid + jcn;
     var dbPath = path + ".png"
     // Or save the image asynchronously.

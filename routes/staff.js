@@ -10,12 +10,13 @@ var Services = require('../models/servicemodel')
 var Lubricants = require('../models/lubricantmodel')
 var UniqueNumber = require('unique-number')
 var uniqueNumber = new UniqueNumber();
+var ba64 = require('ba64');
 var ObjectId = require('mongoose').Types.ObjectId;
 // mail
 var nodemailer = require('nodemailer');
 // pdf
 const puppeteer = require('puppeteer')
-// const fs = require('fs')
+const fs = require('fs');
 // const hbs = require('handlebars')
 // const path = require('path')
 // const moment = require('moment')
@@ -283,23 +284,58 @@ router.get('/arrivalCars', (req, res) => {
 })
 
 router.get('/dentImage/:cid/:jcn', (req, res) => {
-    // res.render('staff/dentImage', {
-    //     title: 'Dent Image',
-    //     jobcardNo: req.params.jcn
-    // })
-    res.redirect('/staff/jobcardForm/'+req.params.cid+'/'+req.params.jcn)
+    res.render('staff/dentImage', {
+        title: 'Dent Image',
+        jobcardNo: req.params.jcn,
+        cid: req.params.cid
+    })
+    // res.redirect('/staff/jobcardForm/'+req.params.cid+'/'+req.params.jcn)
 })
 
-// router.post('/saveCarImage/:jcn', (req, res) => {
-//     var file = req.files.carimage
-//     file.mv('/images/dentimages/'+req.params.jcn, (err) => {
-//         if (err) {
-//             res.status(500).send(err+' | Your image has not been uploaded, go to the previous page...');
-//         } else {            
-//             res.send('done')
-//         }
-//     });
-// })
+router.post('/saveCarImage/:cid/:jcn', (req, res) => {
+    var imagedata = req.body.carimage;
+    var jcn = req.params.jcn;
+    var cid = req.params.cid;
+    //console.log(imagedata);
+
+
+    ba64.writeImageSync("images/" + cid + jcn, imagedata); // Saves myimage.jpeg.
+    var path = "dentImages/" + cid + jcn;
+    var dbPath = path + ".png"
+    // Or save the image asynchronously.
+    ba64.writeImage("myimage", imagedata, function(err){
+        if (err) throw err;
+
+        console.log("Image saved successfully");
+
+        // do stuff
+    });    
+    CustomerInfo.findByIdAndUpdate(cid, {
+        $set: {
+            'jobcardInfo.dentImage': dbPath
+        }
+    }, {
+        upsert: true
+    }, (err, done) => {
+        if (err) {
+            throw err
+        }
+        console.log(done);
+    })
+    res.redirect('/staff/jobcardForm/'+cid+'/'+jcn);
+    //     fs.writeFile('logo111.png', imagedata, 'base64', function(err){
+    //         if (err) throw err
+    //         console.log('File saved.')
+    // })
+    // file.mv('/images/dentimages/'+r)eq.params.jcn, (err) => {
+    //     if (err) {
+    //         res.status(500).send(err+' | Your image has not been uploaded, go to the previous page...');
+    //     } else {            
+    //         res.send('done')
+    //     }
+    // });
+   // res.redirect('/staff/jobcardForm/'+req.params.cid+'/'+req.params.jcn);
+});
 
 router.get('/jobcardForm/:cid/:jcn', (req, res) => {
     CustomerInfo.findOne({

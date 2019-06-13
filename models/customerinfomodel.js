@@ -44,6 +44,7 @@ var CustomerInfo = new Schema({
     jobcardInfo: {     
         jobcardNumber: String,        
         workType: String,
+        dentImage: String,
         arrival: {
             // date: Date,
             date: String,
@@ -134,6 +135,7 @@ var CustomerInfo = new Schema({
         type: Array,
         jobcardNumber: String,        
         workType: String,
+        dentImage: String,
         arrival: {
             // date: Date,
             date: String,

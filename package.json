@@ -6,12 +6,14 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "ba64": "^3.0.9",
     "client-sessions": "^0.8.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "download-pdf": "^0.1.6",
     "express": "~4.16.0",
     "express-session": "^1.16.1",
+    "fs": "0.0.1-security",
     "handlebars": "^4.1.2",
     "hbs": "~4.0.1",
     "hbs-mailer": "^0.4.1",

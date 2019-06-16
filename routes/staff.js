@@ -10,23 +10,65 @@ var Services = require('../models/servicemodel')
 var Lubricants = require('../models/lubricantmodel')
 var UniqueNumber = require('unique-number')
 var uniqueNumber = new UniqueNumber();
-var ba64 = require('ba64');
 var ObjectId = require('mongoose').Types.ObjectId;
 // mail
 var nodemailer = require('nodemailer');
 // pdf
 const puppeteer = require('puppeteer')
-const fs = require('fs');
+var ba64 = require('ba64')
+// const fs = require('fs')
 // const hbs = require('handlebars')
 // const path = require('path')
 // const moment = require('moment')
 const CONSTANTS = require('../globals').constants;
 const getFormatedDate = CONSTANTS.getFormatedDate;
 
+// login user
+router.get('/', (req, res) => {
+    res.render('staff/login', {
+        title: 'Login user'
+    })
+})
 
+router.post('/loginUser', (req, res) => {
+    var username = req.body.username
+    var pwd = req.body.password
+
+    var app = express();
+    app.use(session({
+        secret: 'secret',
+        resave: true,
+        saveUninitialized: true
+    }));
+
+   if(username ===  "bhiren" && pwd == "admin123")
+    {
+        req.session.loggedin = true;
+		req.session.username = username;
+        res.redirect('/staff/dashboard')
+    }
+    if(username ===  "mankit" && pwd == "admin123")
+    {
+        req.session.loggedin = true;
+		req.session.username = username;
+        res.redirect('/admin')
+    }
+    else
+           {
+            res.redirect('/staff')
+           }
+    
+})
+
+router.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/staff')
+})
 
 // get dashboard
 router.get('/dashboard', (req, res) => {
+if (req.session.loggedin && req.session.username == "bhiren") {
+    var closedCount = parseInt(0)
     CustomerInfo.count({
         'jobcardInfo.status': 'arrival'
     }, (err, arrivalCount) => {
@@ -45,22 +87,49 @@ router.get('/dashboard', (req, res) => {
                 if (err) {
                     throw err
                 }
+         CustomerInfo.count({
+                    'jobcardInfo.status': {$in:['pending','repaired']}
+                }, (err, jobcardCount) => {
+                    if (err) {
+                        throw err
+                    }
+                    CustomerInfo.find({}, (err, customers) => {
+                        if (err) {
+                            throw err
+                        }
+                        for (let i = 0; i < customers.length; i++) {
+                            const c = customers[i];
+                            if (c.history.length) {
+                                closedCount = closedCount + c.history.length
+                            }
+                        }
                 res.render('staff/dashboard', {
                     title: 'Dashboard',
                     arrivalCount: arrivalCount,
                     pendingCount: pendingCount,
-                    repairedCount: repairedCount
+                    repairedCount: repairedCount,
+                    jobcardCount: jobcardCount,
+                    closedCount :closedCount
                 })
             })
-        })        
+        })  
+    })      
+})
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // get search page
 router.get('/search', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     res.render('staff/search', {
         title: 'Search Vehcile'
     })
+} else {
+    res.redirect('/staff')
+} 
 })
 
 router.post('/checkVehicle', (req, res) => {
@@ -86,6 +155,7 @@ router.post('/checkVehicle', (req, res) => {
 })
 
 router.get('/customerRegistration', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     Company.find({}, (err, companies) => {
         if (err) {
             throw err
@@ -96,6 +166,9 @@ router.get('/customerRegistration', (req, res) => {
             companies: companies
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 router.post('/addCustomer', (req, res) => {
@@ -160,6 +233,7 @@ router.post('/addCustomer', (req, res) => {
 })
 
 router.get('/customerVerification', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     var customerId = req.session.registeredCustomerId    
     CustomerInfo.findById(customerId, (err, customer) => {
         if (err) {
@@ -197,6 +271,9 @@ router.get('/customerVerification', (req, res) => {
             })
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 router.post('/updateCustomer/:cid', (req, res) => {
@@ -234,6 +311,7 @@ router.post('/updateCustomer/:cid', (req, res) => {
 })
 
 router.get('/updateArrival/:cid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     CustomerInfo.findByIdAndUpdate(req.params.cid, {
         $set: {
             'jobcardInfo.status': 'arrival',                    
@@ -245,6 +323,9 @@ router.get('/updateArrival/:cid', (req, res) => {
         }
         res.redirect('/staff/dashboard')
     })    
+} else {
+    res.redirect('/staff')
+}
 })
 
 router.get('/getModelsByCompanyId/:cid', (req, res) => {
@@ -270,19 +351,43 @@ router.get('/getVarientsByModelId/:mid', (req, res) => {
 })
 
 router.get('/arrivalCars', (req, res) => {
+   
+    if (req.session.loggedin && req.session.username == "bhiren") {
+		CustomerInfo.find({
+            'jobcardInfo.status': 'arrival'
+        }, (err, customer) => {
+            if (err) {
+                throw err
+            }
+            res.render('staff/arrivalCars', {
+                title: 'arrival Cars',
+                customer: customer
+            })
+        })
+	} else {
+		res.redirect('/staff')
+    }
+})
+
+router.get('/jobcardList', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     CustomerInfo.find({
-        'jobcardInfo.status': 'arrival'
-    }, (err, customer) => {
+        'jobcardInfo.status':{$in:['pending','repaired']}
+    }, (err, customers) => {
         if (err) {
             throw err
         }
-        res.render('staff/arrivalCars', {
-            title: 'arrival Cars',
-            customer: customer
+        res.render('staff/jobcardList', {
+            title: 'jobcard Cars',
+            customers: customers,
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
+/// gunjan code add by hiren
 router.get('/dentImage/:cid/:jcn', (req, res) => {
     res.render('staff/dentImage', {
         title: 'Dent Image',
@@ -323,21 +428,10 @@ router.post('/saveCarImage/:cid/:jcn', (req, res) => {
         console.log(done);
     })
     res.redirect('/staff/jobcardForm/'+cid+'/'+jcn);
-    //     fs.writeFile('logo111.png', imagedata, 'base64', function(err){
-    //         if (err) throw err
-    //         console.log('File saved.')
-    // })
-    // file.mv('/images/dentimages/'+r)eq.params.jcn, (err) => {
-    //     if (err) {
-    //         res.status(500).send(err+' | Your image has not been uploaded, go to the previous page...');
-    //     } else {            
-    //         res.send('done')
-    //     }
-    // });
-   // res.redirect('/staff/jobcardForm/'+req.params.cid+'/'+req.params.jcn);
 });
 
 router.get('/jobcardForm/:cid/:jcn', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     CustomerInfo.findOne({
         '_id': req.params.cid,
         'jobcardInfo.status': 'arrival'
@@ -354,10 +448,13 @@ router.get('/jobcardForm/:cid/:jcn', (req, res) => {
         res.render('staff/jobcardForm', {
             title: 'Jobcard Form',
             customer: customer,
-            arrivalDate: dd+'-'+mm+'-'+yyyy,
+            arrivalDate: dd+'/'+mm+'/'+yyyy,
             arrivalTime: today.getHours()+':'+today.getMinutes()+':'+today.getSeconds()
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 router.get('/addComplain/:complain/:cid', (req, res) => {
@@ -461,7 +558,7 @@ router.post('/saveJobcardForm/:cid', (req, res) => {
     CustomerInfo.findByIdAndUpdate(req.params.cid, {
         $set: {            
             'jobcardInfo.workType': req.body.work_type,
-            'jobcardInfo.arrival.date': getFormatedDate(new Date(req.body.arrival_date)),
+            'jobcardInfo.arrival.date': req.body.arrival_date,
             'jobcardInfo.arrival.time': req.body.arrival_time,
             'jobcardInfo.delivery.date': getFormatedDate(new Date(req.body.delivery_date)),
             'jobcardInfo.delivery.time': req.body.delivery_time,
@@ -504,6 +601,7 @@ router.post('/saveJobcardForm/:cid', (req, res) => {
 })
 
 router.get('/jobcardview/:cid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     CustomerInfo.findOne({
         _id: req.params.cid
     }, (err, customer) => {
@@ -531,9 +629,13 @@ router.get('/jobcardview/:cid', (req, res) => {
             })
         })        
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 router.get('/pendingCars', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     CustomerInfo.find({
         'jobcardInfo.status': 'pending'
     }, (err, customers) => {
@@ -545,9 +647,14 @@ router.get('/pendingCars', (req, res) => {
             customers: customers,
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 router.get('/addJobs/:cid', (req, res) => {
+
+    if (req.session.loggedin && req.session.username == "bhiren") {
     CustomerInfo.findById(req.params.cid, (err, customer) => {
         if (err) {
             throw err
@@ -581,6 +688,9 @@ router.get('/addJobs/:cid', (req, res) => {
             })
         })
     })  
+} else {
+    res.redirect('/staff')
+}
 })
 
 // ajax for adding part
@@ -766,6 +876,7 @@ router.post('/removeService/:sid/:cid', (req, res) => {
 })
 
 router.get('/viewStatus/:cid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     var pendingParts = []
     var completedParts = []
     var pendingServices = []
@@ -810,9 +921,13 @@ router.get('/viewStatus/:cid', (req, res) => {
             completedLubricants: completedLubricants
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 router.get('/updateStatus/:cid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     var pendingParts = []
     var pendingLubricants = []
     var pendingServices = []
@@ -846,9 +961,13 @@ router.get('/updateStatus/:cid', (req, res) => {
             customerId: customer._id
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 router.post('/updateStatus/:cid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     var parts = req.body.parts
     var lubricants = req.body.lubricants
     var services = req.body.services
@@ -984,9 +1103,13 @@ router.post('/updateStatus/:cid', (req, res) => {
             })            
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 router.post('/addDiscount/:cid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     var type = req.body.type
     var disc = req.body.discount
 
@@ -1029,9 +1152,13 @@ router.post('/addDiscount/:cid', (req, res) => {
             })
         })
     }
+} else {
+    res.redirect('/staff')
+}
 })
 
 router.post('/addPendingPayment/:cid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     CustomerInfo.findByIdAndUpdate(req.params.cid, {
         $set: {
             'jobcardInfo.payment.pending.amount': req.body.pp
@@ -1042,9 +1169,13 @@ router.post('/addPendingPayment/:cid', (req, res) => {
         }
         res.redirect('/staff/repairedView/'+req.params.cid)
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 router.get('/repairedCars', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     CustomerInfo.find({
         'jobcardInfo.status': 'repaired'
     }, (err, customers) => {
@@ -1056,10 +1187,14 @@ router.get('/repairedCars', (req, res) => {
             customers: customers
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // By Ankit @3/6/19
 router.get('/repairedView/:cid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     var partsTotalPrice = parseInt(0)
     var servicesTotalPrice = parseInt(0)
     var lubricantsTotalPrice = parseInt(0)
@@ -1094,10 +1229,14 @@ router.get('/repairedView/:cid', (req, res) => {
             totalPrice: totalPrice
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // ankit @3/6/2019
 router.get('/bill/:cid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     CustomerInfo.findById(req.params.cid, (err, customer) => {
         if (err) {
             throw err
@@ -1106,7 +1245,6 @@ router.get('/bill/:cid', (req, res) => {
         var dd = today.getDate();
         var mm = today.getMonth()+1; //January is 0!
         var yyyy = today.getFullYear();
-
         if(dd<10) {
             dd = '0'+dd
         } 
@@ -1114,6 +1252,22 @@ router.get('/bill/:cid', (req, res) => {
         if(mm<10) {
             mm = '0'+mm
         } 
+        var parts = customer.jobcardInfo.parts;
+        for(i =0 ; i<parts.length ; i++)
+        {
+            if (customer.jobcardInfo.parts[i].repairFlag === "1")
+             {
+                customer.jobcardInfo.parts[i].pPrice =  parseInt(parts[i].price) ;
+            }
+                else{
+                    customer.jobcardInfo.parts[i].pPrice = parseInt(parts[i].labour) + parseInt(parts[i].price) ;
+                }
+        }
+        var lubricants = customer.jobcardInfo.lubricants;
+        for(i =0 ; i<lubricants.length ; i++)
+        {
+            customer.jobcardInfo.lubricants[i].gPrice = lubricants[i].labour + lubricants[i].price;
+        }
         todayDate = dd + '/' +mm + '/' + yyyy;
         res.render('staff/bill', {
             title: 'Bill',
@@ -1121,9 +1275,13 @@ router.get('/bill/:cid', (req, res) => {
             todayDate: todayDate
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 router.post('/closeCar', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     var cid = req.body.customerId
 
     CustomerInfo.findById(cid, (err, customer) => {
@@ -1187,8 +1345,27 @@ router.post('/closeCar', (req, res) => {
             })
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
+
+router.get('/closedCars', (req, res) => {
+    
+    CustomerInfo.find({}, (err, customers) => {
+        if (err) {
+            throw err
+        }        
+        
+        res.render('staff/closedCars', {
+            title: 'Closed Cars',
+            customers: customers
+        })  
+    })
+})
+
 router.get('/pastHistory/:cid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     CustomerInfo.findById(req.params.cid, (err, customer) => {
         if (err) {
             throw err
@@ -1198,9 +1375,13 @@ router.get('/pastHistory/:cid', (req, res) => {
             customer: customer
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 router.get('/pastHistoryView/:cid/:hindex', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
     var cid = new ObjectId(req.params.cid)
     CustomerInfo.findOne({
         '_id': cid
@@ -1215,7 +1396,32 @@ router.get('/pastHistoryView/:cid/:hindex', (req, res) => {
             hindex: req.params.hindex
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
+
+router.get('/closedCarsView/:cid/:hindex', (req, res) => {
+    if (req.session.loggedin && req.session.username == "bhiren") {
+    var cid = new ObjectId(req.params.cid)
+    CustomerInfo.findOne({
+        '_id': cid
+    }, (err, customer) => {
+        if (err) {
+            throw err
+        }        
+        res.render('staff/closedCarsView', {
+            title: 'History',
+            customer: customer,
+            history: customer.history[req.params.hindex],
+            hindex: req.params.hindex
+        })
+    })
+} else {
+    res.redirect('/staff')
+}
+})
+
 
 router.get('/mail', (req, res) => {
     var nodemailer = require('nodemailer');

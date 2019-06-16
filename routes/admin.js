@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var session = require('client-sessions')
 var Company = require('../models/companymodel')
 var Model = require('../models/modelmodel')
 var Varient = require('../models/varientmodel')
@@ -7,16 +8,20 @@ var Parts = require('../models/partsmodel')
 var Services = require('../models/servicemodel')
 var Lubricants = require('../models/lubricantmodel')
 // var ObjectId = require('mongoose').Types.ObjectId;
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
+    if (req.session.loggedin && req.session.username == "mankit") {
     res.render('admin/adminDashboard', {
         title: 'Admin Dashboard'
     })
-});
+} else {
+    res.redirect('/staff')
+}
+})
 
 // get all companies
 router.get('/companies', (req, res, next) => {
+if (req.session.loggedin && req.session.username == "mankit") {
     Company.find({}, (err, companies) => {
         if (err) {
             throw err;
@@ -27,10 +32,14 @@ router.get('/companies', (req, res, next) => {
             });
         }
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // add company
 router.post('/addCompany', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
   var c = new Company()
 
   c.name = req.body.company
@@ -42,10 +51,14 @@ router.post('/addCompany', (req, res) => {
         res.redirect('back')          
       }
   })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // get models of company
 router.get('/models/:cid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     Company.findById(req.params.cid, (err, company) => {
         if (err) {
             throw err
@@ -64,10 +77,14 @@ router.get('/models/:cid', (req, res) => {
             }
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // add model for company
 router.post('/addModel/:cid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     var model = req.body.model
 
     var m = new Model()
@@ -82,10 +99,14 @@ router.post('/addModel/:cid', (req, res) => {
         console.log(model)
         res.redirect('back')
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // get all varients for model
 router.get('/varients/:mid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     Model.findById(req.params.mid, (err, model) => {
         if (err) {
             throw err
@@ -103,10 +124,14 @@ router.get('/varients/:mid', (req, res) => {
             })
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // add varient for model
 router.post('/addVarient/:mid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     var varient = req.body.varient
 
     var v = new Varient()
@@ -121,10 +146,14 @@ router.post('/addVarient/:mid', (req, res) => {
         console.log(varient)
         res.redirect('back')
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // get all parts
 router.get('/parts/:vid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     Varient.findById(req.params.vid, (err, varient) => {
         if (err) {
             throw err
@@ -142,10 +171,13 @@ router.get('/parts/:vid', (req, res) => {
             })
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
-
 // insert part to varient
 router.post('/addPart/:vid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     var p = new Parts()
 
     p.name = req.body.part
@@ -161,10 +193,14 @@ router.post('/addPart/:vid', (req, res) => {
         console.log(part)
         res.redirect('back')
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // update part
 router.post('/updatePart/:pid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     Parts.findByIdAndUpdate(req.params.pid, {
         $set: {
             name: req.body.part,
@@ -180,10 +216,14 @@ router.post('/updatePart/:pid', (req, res) => {
         }
         res.redirect('back')
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // delete part
 router.post('/deletePart/:pid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     Parts.findByIdAndRemove({
         '_id': req.params.pid
     }, (err, done) => {
@@ -193,10 +233,14 @@ router.post('/deletePart/:pid', (req, res) => {
         console.log(done)
         res.redirect('back')
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // get all services
 router.get('/services/:vid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     Varient.findById(req.params.vid, (err, varient) => {
         if (err) {
             throw err
@@ -214,10 +258,14 @@ router.get('/services/:vid', (req, res) => {
             })
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // insert service to varient
 router.post('/addService/:vid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     var s = new Services()
 
     s.name = req.body.service
@@ -234,10 +282,14 @@ router.post('/addService/:vid', (req, res) => {
         console.log(service)
         res.redirect('back')
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // delete part
 router.post('/deleteService/:sid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     Services.findByIdAndRemove({
         '_id': req.params.sid
     }, (err, done) => {
@@ -247,10 +299,14 @@ router.post('/deleteService/:sid', (req, res) => {
         console.log(done)
         res.redirect('back')
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // get all lubricants
 router.get('/lubricants/:vid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     Varient.findById(req.params.vid, (err, varient) => {
         if (err) {
             throw err
@@ -268,10 +324,14 @@ router.get('/lubricants/:vid', (req, res) => {
             })
         })
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // add lubricants to varient
 router.post('/addLubricant/:vid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     var l = new Lubricants()
 
     l.name = req.body.lubricant
@@ -289,10 +349,14 @@ router.post('/addLubricant/:vid', (req, res) => {
         console.log(lubricants)
         res.redirect('back')
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 // delete lubricant
 router.post('/deleteLubricant/:lid', (req, res) => {
+    if (req.session.loggedin && req.session.username == "mankit") {
     Lubricants.findByIdAndRemove({
         '_id': req.params.lid
     }, (err, done) => {
@@ -302,6 +366,9 @@ router.post('/deleteLubricant/:lid', (req, res) => {
         console.log(done)
         res.redirect('back')
     })
+} else {
+    res.redirect('/staff')
+}
 })
 
 module.exports = router;

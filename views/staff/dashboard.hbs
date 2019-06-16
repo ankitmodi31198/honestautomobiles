@@ -7,6 +7,8 @@
 	<a href="/staff/arrivalCars" class="w3-bar-item w3-button">Arrival Cars</a>
 	<a href="/staff/pendingCars" class="w3-bar-item w3-button">Pending Cars</a>
 	<a href="/staff/repairedCars" class="w3-bar-item w3-button">Repaired Cars</a>
+	<a href="/staff/jobcardList" class="w3-bar-item w3-button">JobcardList </a>
+	<a href="/staff/closedCars" class="w3-bar-item w3-button">Closed Cars</a>
 </div>
 
 <!-- Page Content -->
@@ -17,7 +19,7 @@
 				<a href="/staff/dashboard" class="navbar-logo-link">JCMS</a> 
 		</span>
 		<div class="navbar-userpart">
-				<span class="navbar-userpart-username">Welcome, Staff | </span> <span><a href="">logout</a></span>
+				<span class="navbar-userpart-username">Welcome, Staff | </span> <span><a href="/staff/logout">logout</a></span>
 		</div>
 </div>
         
@@ -86,6 +88,32 @@
 					<h5 class='' >&nbsp;<span></span></h5>
 					<div class="grow grow1">
 						<p><font style="color: white">Repaired Cars : {{repairedCount}}</p>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div> 
+		<div class="col-md-3 widget widget1">
+		<div class="r3_counter_box">
+			<a href="/staff/jobcardList" class="my-dashboard-box-link">
+				<i class="fa fa-check-square"></i>
+				<div class="stats">
+					<h5 class='' >&nbsp;<span></span></h5>
+					<div class="grow grow1">
+						<p><font style="color: white">JobcardList  : {{jobcardCount}}</p>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div> 
+		<div class="col-md-3 widget widget1">
+		<div class="r3_counter_box">
+			<a href="/staff/closedCars" class="my-dashboard-box-link">
+				<i class="fa fa-check-square"></i>
+				<div class="stats">
+					<h5 class='' >&nbsp;<span></span></h5>
+					<div class="grow grow1">
+						<p><font style="color: white">Closed Cars : {{closedCount}}</p>
 					</div>
 				</div>
 			</a>

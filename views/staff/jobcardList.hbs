@@ -3,18 +3,18 @@
             <button class="w3-bar-item w3-button w3-large"
             onclick="w3_close()">Close &times;</button>
              <h3 class="w3-bar-item">Menu</h3>
-       <a href="/staff/dashboard" class="w3-bar-item w3-button">Dashboard</a>
+        <a href="/staff/dashboard" class="w3-bar-item w3-button">Dashboard</a>
 	<a href="/staff/search" class="w3-bar-item w3-button">Search Customer</a>
 	<a href="/staff/arrivalCars" class="w3-bar-item w3-button">Arrival Cars</a>
 	<a href="/staff/pendingCars" class="w3-bar-item w3-button">Pending Cars</a>
-	<a href="/staff/repairedCars" class="w3-bar-item w3-button">Repaired Cars</a>    
+	<a href="/staff/repairedCars" class="w3-bar-item w3-button">Repaired Cars</a>  
     <a href="/staff/jobcardList" class="w3-bar-item w3-button">JobcardList </a>
-	<a href="/staff/closedCars" class="w3-bar-item w3-button">Closed Cars</a>    
+	<a href="/staff/closedCars" class="w3-bar-item w3-button">Closed Cars</a>         
     </header>
 <!-- Page Content -->
-    <main id="main">
+    <div>
 
-          <div class="my-new-header">
+         <div class="my-new-header">
             <button id="openNav" class="w3-button w3-xlarge my-hamburger-btn" onclick="w3_open()">&#9776;</button>
             <span>
                 <a href="/staff/dashboard" class="navbar-logo-link">JCMS</a> 
@@ -23,11 +23,12 @@
                 <span class="navbar-userpart-username">Welcome, Staff | </span> <span><a href="/staff/logout">logout</a></span>
             </div>
         </div>
-        <!-- breadcrumbs at top of the page -->
+
+       <!-- breadcrumbs at top of the page -->
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/staff/dashboard">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Arrival Cars List</li>
+                <li class="breadcrumb-item active" aria-current="page">Repaired Cars</li>
             </ol>
         </nav>    
         
@@ -35,7 +36,7 @@
         <div class="my-dashboard">
             <div class="my-dashboard-header">
                 <center>
-                    <h4>Arrival Cars List</h4>
+                    <h4>JobCard Cars list</h4>
                 </center>
             </div>
             <div class="container mt-5">
@@ -43,35 +44,33 @@
 			   	<thead style="text-align: center;">
 			   		<tr>
 			   			<th>Vehicle No</th>
-			   			<th>Jobcard No</th>
-			   			<th>Name</th>
-			   			<th>Car Name</th> 
-			   			<th>Customer Contact</th>
-			   			<th>Action</th>	
+			   			<th>JobCard No</th>			   				
+			   			<th>Arrival Date</th>
+			   			<th>Customer Name</th>
+			   			<th>Company</th>                        
+			   			<th>Delivery Date</th>
+			   			<th>Action</th>
 			   		</tr>
 			   	</thead>
-			   	<tbody style="font-size: 12px; text-align: center;">	
-                       {{#each customer}}		   		
-							<tr>
-							<td>{{this.vehicleInfo.vehicleNumber}}</td>
-							<td>{{this.jobcardInfo.jobcardNumber}}</td>
-							<td>{{this.name}}</td>
-							<td>{{this.vehicleInfo.vehicleNumber}}</td>
-							<td>{{this.contact.phone}}</td>
-							<td><a href='/staff/dentImage/{{this._id}}/{{this.jobcardInfo.jobcardNumber}}' >Add Job card</a></td>
-							</tr>															
-                        {{/each}}
+			   	<tbody style="font-size: 12px; text-align: center;">
+                    {{#each customers}}
+                        <tr>
+                        <td>{{this.vehicleInfo.vehicleNumber}}</td>
+                        <td>{{this.jobcardInfo.jobcardNumber}}</td>
+                        <td>{{this.jobcardInfo.arrival.date}}</td>
+                        <td>{{this.name}}</td>
+                        <td>{{this.vehicleInfo.company.name}} {{this.vehicleInfo.model.name}}</td>                                           
+                        <td>{{this.jobcardInfo.delivery.date}}</td>
+                        <td><a href="/staff/JobcardView/{{this._id}}">View</a></td>
+                        </tr>	 
+                    {{/each}}
 			   	</tbody>
 	   		</table>
 		</div>
             
             <div class="my-dashboard-content mt-3">
                 <div class="row">
-                    <!-- Put the iterator over here, put this whole div in the loop and the cards will be set accordingly -->
-                    <!-- LOOP Starts -->
-                    
           
                 </div>
             </div>
         </div>
-    </main>

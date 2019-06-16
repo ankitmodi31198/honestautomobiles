@@ -7,14 +7,14 @@
 	<a href="/staff/search" class="w3-bar-item w3-button">Search Customer</a>
 	<a href="/staff/arrivalCars" class="w3-bar-item w3-button">Arrival Cars</a>
 	<a href="/staff/pendingCars" class="w3-bar-item w3-button">Pending Cars</a>
-	<a href="/staff/repairedCars" class="w3-bar-item w3-button">Repaired Cars</a>    
-    <a href="/staff/jobcardList" class="w3-bar-item w3-button">JobcardList </a>
-	<a href="/staff/closedCars" class="w3-bar-item w3-button">Closed Cars</a>    
+	<a href="/staff/repairedCars" class="w3-bar-item w3-button">Repaired Cars</a>      
+       <a href="/staff/jobcardList" class="w3-bar-item w3-button">JobcardList </a>
+	<a href="/staff/closedCars" class="w3-bar-item w3-button">Closed Cars</a>   
     </header>
-<!-- Page Content -->
+    <!-- Page Content -->
     <main id="main">
 
-          <div class="my-new-header">
+         <div class="my-new-header">
             <button id="openNav" class="w3-button w3-xlarge my-hamburger-btn" onclick="w3_open()">&#9776;</button>
             <span>
                 <a href="/staff/dashboard" class="navbar-logo-link">JCMS</a> 
@@ -27,40 +27,47 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/staff/dashboard">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Arrival Cars List</li>
+                <li class="breadcrumb-item active" aria-current="page">Closed Cars List</li>
             </ol>
-        </nav>    
-        
+        </nav>
         <!-- dashboard -->
         <div class="my-dashboard">
             <div class="my-dashboard-header">
                 <center>
-                    <h4>Arrival Cars List</h4>
+                    <h4>Closed Cars List</h4>                    
                 </center>
-            </div>
+            </div>            
             <div class="container mt-5">
 	   		<table id="data-table-simple-1" class="table">
 			   	<thead style="text-align: center;">
 			   		<tr>
-			   			<th>Vehicle No</th>
-			   			<th>Jobcard No</th>
+			   			<th>Vehicle No</th>			   			
 			   			<th>Name</th>
-			   			<th>Car Name</th> 
+                        <th>Company</th>
+			   			<th>Model</th> 
 			   			<th>Customer Contact</th>
-			   			<th>Action</th>	
+                        <th>Delivery Date</th>                        
+                        <th>Amount</th>
+                        <th>Action</th>
 			   		</tr>
 			   	</thead>
-			   	<tbody style="font-size: 12px; text-align: center;">	
-                       {{#each customer}}		   		
-							<tr>
-							<td>{{this.vehicleInfo.vehicleNumber}}</td>
-							<td>{{this.jobcardInfo.jobcardNumber}}</td>
-							<td>{{this.name}}</td>
-							<td>{{this.vehicleInfo.vehicleNumber}}</td>
-							<td>{{this.contact.phone}}</td>
-							<td><a href='/staff/dentImage/{{this._id}}/{{this.jobcardInfo.jobcardNumber}}' >Add Job card</a></td>
-							</tr>															
-                        {{/each}}
+			   	<tbody style="font-size: 12px; text-align: center;">
+			   		{{#each customers}}                        
+                        {{#if this.history}}
+                            {{#each this.history}}
+                                <tr>
+                                    <td>{{../this.vehicleInfo.vehicleNumber}}</td>							
+                                    <td>{{../this.name}}</td>
+                                    <td>{{../this.vehicleInfo.company.name}}</td>
+                                    <td>{{../this.vehicleInfo.model.name}}</td>
+                                    <td>{{../this.contact.phone}}</td>	
+                                    <td>{{this.delivery.date}}</td>						
+                                    <td>{{this.payment.final}}</td>
+                                    <td><a href='/staff/closedCarsView/{{../this._id}}/{{@index}}'>View</a></td>
+                                </tr> 
+                            {{/each}}
+                        {{/if}}                        
+                    {{/each}}                    
 			   	</tbody>
 	   		</table>
 		</div>

@@ -31,7 +31,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
-app.use(session({ secret: 'thisisrandomstringofkoalastore'}));
+app.use(session({ secret: 'thisisjcps', cookie: {maxAge: 3*24*60*60*1000}}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

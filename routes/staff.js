@@ -30,23 +30,12 @@ const staffAuth = (req, res, next) => {
     } else if(req.cookies['jcps_adminname']) {
         res.redirect('/admin')
     } else {
-        res.redirect('/staff')
+        res.redirect('/login')
     }
 }
 
 // login user
-router.get('/', (req, res) => {
-
-    if (req.cookies['jcps_staffname']) {
-        res.redirect('/staff/dashboard')
-    } else if(req.cookies['jcps_adminname']) {
-        res.redirect('/admin')
-    } else {
-        res.render('staff/login', {
-            title: 'Login user'
-        })
-    }
-})
+//hiren
 
 router.post('/loginUser', (req, res) => {
     var username = req.body.username
@@ -64,14 +53,14 @@ router.post('/loginUser', (req, res) => {
     }
     else
     {
-        res.redirect('/staff')
+        res.redirect('/login')
     }
 })
 
 router.get('/logout', (req, res) => {
     res.clearCookie('jcps_staffname')
     res.clearCookie('jcps_adminname')
-    res.redirect('/staff')
+    res.redirect('/login')
 })
 
 // get dashboard

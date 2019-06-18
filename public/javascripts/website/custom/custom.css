@@ -1,0 +1,33 @@
+.fury-notify{
+    display: none;
+}
+
+.tab-content{
+    min-height: 500px;
+}
+
+.service-item-group{
+    list-style: none;
+    padding:0;
+}
+
+.service-item-group li{
+    display: block;
+    padding:10px;
+    background: #efefef;
+    font-size:16px;
+}
+.service-item-group li .name,.service-item-group li .price{
+    min-width: 300px;
+    display: inline-block;
+    line-height: 30px;
+}
+
+.service-item-group li .price{
+    min-width:100px;
+}
+
+.service-item-group li .btn{
+    float: right;
+    margin-left: 5px;
+}

@@ -1,0 +1,942 @@
+﻿/* Smartphones (portrait) ----------- */
+.forget-password {
+    position: relative;
+    z-index: 5;
+}
+
+.status {
+    background-color: #F3E200;
+    position: fixed;
+    width: 99%;
+    height: 99%;
+}
+
+    .status .main {
+        position: relative;
+        top: 10%;
+        max-width: 520px;
+        height: 10px;
+        margin: 0px auto;
+        text-align: center;
+    }
+
+    .status .line {
+        position: relative;
+        background-color: #ffffff;
+        height: 3px;
+        margin: 0px auto 3px auto;
+    }
+
+        .status .line.one {
+            width: 90%;
+        }
+
+        .status .line.two {
+            width: 94%;
+        }
+
+        .status .line.three {
+            width: 98%;
+        }
+
+    .status .main-box {
+        position: relative;
+        background-color: #ffffff;
+        width: 80%;
+        text-align: center;
+        padding: 10%;
+    }
+
+    .status .appointmentno {
+        margin-bottom: 20px;
+        color: rgb(24,28,39);
+        font-size: 20.0px;
+        font-family: Oxygen, sans-serif;
+        line-height: 30.0px;
+    }
+
+    .status .appointment-status {
+        margin-bottom: 40px;
+        color: rgb(141,148,163);
+        font-size: 16.0px;
+        font-family: Oxygen, sans-serif;
+        line-height: 24.0px;
+    }
+
+    .status .home-btn {
+        color: rgb(255,255,255);
+        text-decoration: none;
+        background-color: #074D9C;
+        padding: 10px 20px;
+        font-size: 16.0px;
+        font-family: Oxygen, sans-serif;
+        line-height: 18.0px;
+        font-weight: 600;
+    }
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) and (orientation : portrait) {
+    /* Styles */
+    .noo-topbar {
+        display: block;
+    }
+
+        .noo-topbar .pull-left {
+            display: none !important;
+        }
+
+    .pc, .center, .zopim {
+        display: none !important;
+    }
+
+    .mobile {
+        display: block;
+    }
+
+    .noo-clients {
+        padding-top: 50px;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    .clients {
+        padding-top: 0px;
+    }
+
+    .noo-newsltter-form {
+        margin-bottom: 25px;
+    }
+
+        .noo-newsltter-form input[type="submit"] {
+            margin-top: 10px;
+            margin-left: 0px;
+        }
+
+        .noo-newsltter-form input[type="text"] {
+            width: 100%;
+        }
+
+    .money-content .money-title {
+        font-size: 20px;
+    }
+
+    .money-content .money-entry-content {
+        width: 100%;
+    }
+
+    .login .content {
+        padding: 15px;
+        width: 300px;
+    }
+
+    .login-form .col-lg-1.pt-13.pl-0.pr-0 {
+        padding-top: 50px !important;
+        text-align: center;
+    }
+
+    .register-form label.Agreement {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .m-tabs-content {
+        padding-left: 10px !important;
+    }
+
+    .Appointments {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .service-details .service-total .total {
+        font-size: 14px;
+    }
+
+    .service-details ul.service-items .item-name {
+        min-width: 70%;
+        width: 70%;
+    }
+
+    .service-details ul.service-items .item-total {
+        min-width: 30%;
+        width: 30%;
+    }
+
+    .car-list {
+        padding-left: 0px;
+    }
+
+        .car-list li label {
+            height: auto;
+        }
+
+        .car-list li.car-item .car-label label {
+            max-width: 100% !important;
+        }
+
+            .car-list li.car-item .car-label label .car-name, .car-list li.car-item .car-label label .plate-number {
+                font-size: 14px;
+            }
+
+    .status {
+        height: 97%;
+        width: 95%;
+    }
+
+        .status .status-logo-box {
+            margin-bottom: 30px;
+        }
+
+    .status-logo {
+        width: 80%;
+    }
+
+    .status .main-box {
+        margin: 0 auto;
+        width: 60%;
+    }
+
+    .status .line.one {
+        width: 70%;
+    }
+
+    .status .line.two {
+        width: 74%;
+    }
+
+    .status .line.three {
+        width: 78%;
+    }
+
+    .AppointmentTime {
+        padding-left: 0px !important;
+    }
+
+        .AppointmentTime select {
+            margin-top: 20px;
+        }
+
+    .Pickup {
+        margin-top: 25px;
+    }
+
+    .radio-list .radio-inline {
+        margin-left: 0px;
+    }
+
+        .radio-list .radio-inline label {
+            max-width: 100%;
+        }
+
+    span.selected-name {
+        min-width: 0px !important;
+    }
+
+    /********mobile-add-car***/
+
+    .mobile-add-car .modal-container {
+        width: 90% !important;
+        padding: 10px;
+    }
+
+        .mobile-add-car .modal-container .modal-header {
+            padding: 0px;
+        }
+
+            .mobile-add-car .modal-container .modal-header h3 {
+                font-size: 18px;
+            }
+
+        .mobile-add-car .modal-container .modal-body {
+            margin: 0px;
+        }
+
+            .mobile-add-car .modal-container .modal-body .form-group {
+                margin-bottom: 10px;
+            }
+
+            .mobile-add-car .modal-container .modal-body .radio-list td {
+                text-align: center;
+                vertical-align: top;
+            }
+
+                .mobile-add-car .modal-container .modal-body .radio-list td label {
+                    margin: 0px !important;
+                    width: 100%;
+                }
+}
+/* Smartphones (landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) and (orientation : landscape) {
+    /* Styles */
+    .pc, .center, .zopim {
+        display: none !important;
+    }
+
+    .noo-topbar .pull-left {
+        display: none !important;
+    }
+
+    .mobile {
+        display: block;
+    }
+
+    .noo-clients {
+        padding-top: 50px;
+        padding-left: 30px !important;
+        padding-right: 15px !important;
+    }
+
+    .clients {
+        padding-top: 0px;
+    }
+
+    .noo-newsltter-form {
+        margin-bottom: 25px;
+    }
+
+        .noo-newsltter-form input[type="submit"] {
+            margin-top: 10px;
+            margin-left: 0px;
+        }
+
+        .noo-newsltter-form input[type="text"] {
+            width: 100%;
+        }
+
+    .money-content {
+        width: 100%;
+    }
+
+        .money-content .money-title {
+            font-size: 20px;
+        }
+
+        .money-content .money-entry-content {
+            width: 100%;
+        }
+
+    .login .content {
+        padding: 15px;
+        width: 300px;
+    }
+
+    .login-form .col-lg-1.pt-13.pl-0.pr-0 {
+        padding-top: 50px !important;
+        text-align: center;
+    }
+
+    .register-form label.Agreement {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .m-tabs-content {
+        padding-left: 10px !important;
+    }
+
+    .Appointments {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .service-details .service-total .total {
+        font-size: 14px;
+    }
+
+    .car-list {
+        padding-left: 0px !important;
+    }
+
+        .car-list li label {
+            height: auto;
+        }
+
+        .car-list li.car-item .car-label label {
+            max-width: 100% !important;
+        }
+
+            .car-list li.car-item .car-label label .car-name, .car-list li.car-item .car-label label .plate-number {
+                font-size: 14px;
+            }
+
+
+
+    .status {
+        height: 97%;
+        width: 96%;
+    }
+
+    .status-logo {
+        width: 80%;
+    }
+
+
+    .status .main-box {
+        padding: 5%;
+        margin: 0 auto;
+        width: 70%;
+    }
+
+    .status .line.one {
+        width: 70%;
+    }
+
+    .status .line.two {
+        width: 74%;
+    }
+
+    .status .line.three {
+        width: 78%;
+    }
+
+    .status .appointmentno {
+        font-size: 16px;
+        margin-bottom: 0px;
+    }
+
+    .status .appointment-status {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .AppointmentTime {
+        padding-left: 0px !important;
+    }
+
+        .AppointmentTime select {
+            margin-top: 20px;
+        }
+
+    .Pickup {
+        margin-top: 25px;
+    }
+
+    .radio-list .radio-inline {
+        margin-left: 0px;
+    }
+
+        .radio-list .radio-inline label {
+            max-width: 100%;
+        }
+
+    span.selected-name {
+        min-width: 0px !important;
+    }
+
+    .mobile-add-car .modal-container {
+        width: 90% !important;
+        padding: 10px;
+    }
+
+        .mobile-add-car .modal-container .modal-header {
+            padding: 0px;
+        }
+
+            .mobile-add-car .modal-container .modal-header h3 {
+                font-size: 18px;
+            }
+
+        .mobile-add-car .modal-container .modal-body {
+            margin: 0px;
+        }
+
+        .mobile-add-car .modal-container .scoll {
+            height: 200px;
+            overflow: auto;
+        }
+
+        .mobile-add-car .modal-container .modal-body .form-group {
+            margin-bottom: 10px;
+        }
+
+            .mobile-add-car .modal-container .modal-body .form-group label {
+                max-width: 100%;
+            }
+
+        .mobile-add-car .modal-container .modal-body .radio-list td {
+            text-align: center;
+            vertical-align: top;
+        }
+
+            .mobile-add-car .modal-container .modal-body .radio-list td label {
+                margin: 0px !important;
+                width: 100%;
+            }
+}
+/* Smartphones (portrait) ----------- */
+@media only screen and (min-device-width : 360px) and (max-device-width : 640px) and (orientation : portrait) {
+    /* Styles */
+    .pc, .center, .zopim {
+        display: none !important;
+    }
+
+    .mobile {
+        display: block;
+    }
+
+    .noo-newsltter-form {
+        margin-bottom: 25px;
+    }
+
+        .noo-newsltter-form input[type="submit"] {
+            margin-top: 10px;
+            margin-left: 0px;
+        }
+
+        .noo-newsltter-form input[type="text"] {
+            width: 100%;
+        }
+
+        .noo-newsltter-form .mc-email {
+            max-width: 100%;
+        }
+
+    .login .content {
+        padding: 15px;
+        width: 300px;
+    }
+
+    .login-form .col-lg-1.pt-13.pl-0.pr-0 {
+        padding-top: 50px !important;
+        text-align: center;
+    }
+
+    .register-form label.Agreement {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .Appointments {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .service-details .service-total .total {
+        font-size: 14px;
+    }
+
+    .service-details ul.service-items .item-name {
+        min-width: 70%;
+        width: 70%;
+    }
+
+    .service-details ul.service-items .item-total {
+        min-width: 30%;
+        width: 30%;
+    }
+
+    .AppointmentTime {
+        padding-left: 0px !important;
+    }
+
+        .AppointmentTime select {
+            margin-top: 20px;
+        }
+
+    .Pickup {
+        margin-top: 25px;
+    }
+
+    .radio-list .radio-inline {
+        margin-left: 0px;
+    }
+
+        .radio-list .radio-inline label {
+            max-width: 100%;
+        }
+
+    span.selected-name {
+        min-width: 0px !important;
+    }
+}
+/* Smartphones (landscape) ----------- */
+@media only screen and (min-device-width : 360px) and (max-device-width : 640px) and (orientation : landscape) {
+    /* Styles */
+    .pc, .center, .zopim {
+        display: none !important;
+    }
+
+    .mobile {
+        display: block;
+    }
+
+    .align_right .figure {
+        text-align: center;
+    }
+
+    img-responsive, .img-thumbnail, .wp-caption, .wp-caption img, img, label {
+        max-width: 50%;
+    }
+
+    .noo-newsltter-form {
+        margin-bottom: 25px;
+    }
+
+        .noo-newsltter-form input[type="submit"] {
+            margin-top: 10px;
+            margin-left: 0px;
+        }
+
+        .noo-newsltter-form input[type="text"] {
+            width: 75%;
+        }
+
+        .noo-newsltter-form .mc-email {
+            max-width: 100%;
+        }
+
+    .login .content {
+        padding: 15px;
+        width: 300px;
+    }
+
+    .login-form .col-lg-1.pt-13.pl-0.pr-0 {
+        padding-top: 50px !important;
+        text-align: center;
+    }
+
+    .register-form label.Agreement {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .Appointments {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .service-details .service-total .total {
+        font-size: 14px;
+    }
+
+    .service-details ul.service-items .item-name {
+        min-width: 70%;
+        width: 70%;
+    }
+
+    .service-details ul.service-items .item-total {
+        min-width: 30%;
+        width: 30%;
+    }
+
+    .car-list {
+        padding-left: 0px;
+    }
+
+        .car-list li label {
+            height: auto;
+        }
+
+        .car-list li.car-item .car-label label {
+            max-width: 100% !important;
+        }
+
+            .car-list li.car-item .car-label label .car-name, .car-list li.car-item .car-label label .plate-number {
+                font-size: 14px;
+            }
+
+    .status {
+        height: 97%;
+        width: 96%;
+    }
+
+    .status-logo {
+        width: 80%;
+    }
+
+
+    .status .main-box {
+        padding: 5%;
+        margin: 0 auto;
+        width: 70%;
+    }
+
+    .status .line.one {
+        width: 70%;
+    }
+
+    .status .line.two {
+        width: 74%;
+    }
+
+    .status .line.three {
+        width: 78%;
+    }
+
+    .status .appointmentno {
+        font-size: 16px;
+        margin-bottom: 0px;
+    }
+
+    .status .appointment-status {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .AppointmentTime {
+        padding-left: 0px !important;
+    }
+
+        .AppointmentTime select {
+            margin-top: 20px;
+        }
+
+    .Pickup {
+        margin-top: 25px !important;
+    }
+
+    .radio-list .radio-inline {
+        margin-left: 0px;
+    }
+
+        .radio-list .radio-inline label {
+            max-width: 100%;
+        }
+
+    span.selected-name {
+        min-width: 0px !important;
+    }
+
+    .mobile-add-car .modal-container {
+        width: 90% !important;
+        padding: 10px;
+    }
+
+        .mobile-add-car .modal-container .modal-header {
+            padding: 0px;
+        }
+
+            .mobile-add-car .modal-container .modal-header h3 {
+                font-size: 18px;
+            }
+
+        .mobile-add-car .modal-container .modal-body {
+            margin: 0px;
+        }
+
+        .mobile-add-car .modal-container .scoll {
+            height: 250px;
+            overflow: auto;
+        }
+
+        .mobile-add-car .modal-container .modal-body .form-group {
+            margin-bottom: 10px;
+        }
+
+            .mobile-add-car .modal-container .modal-body .form-group label {
+                max-width: 100%;
+            }
+
+        .mobile-add-car .modal-container .modal-body .radio-list td {
+            text-align: center;
+            vertical-align: top;
+        }
+
+            .mobile-add-car .modal-container .modal-body .radio-list td label {
+                margin: 0px !important;
+                width: 100%;
+            }
+}
+/* Smartphones (between mobile and tablet) ----------- */
+@media only screen and (min-device-width : 641px) and (max-device-width : 767px) {
+    /* Styles */
+    .pc, .center, .zopim {
+        display: none !important;
+    }
+
+    .mobile {
+        display: block;
+    }
+
+    .noo-newsltter-form {
+        margin-bottom: 25px;
+    }
+
+        .noo-newsltter-form input[type="submit"] {
+            margin-top: 10px;
+            margin-left: 0px;
+        }
+
+        .noo-newsltter-form input[type="text"] {
+            width: 75%;
+        }
+
+        .noo-newsltter-form .mc-email {
+            max-width: 100%;
+        }
+
+    .login .content {
+        padding: 15px;
+        width: 300px;
+    }
+
+    .login-form .col-lg-1.pt-13.pl-0.pr-0 {
+        padding-top: 50px !important;
+        text-align: center;
+    }
+
+    .register-form label.Agreement {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .AppointmentTime {
+        padding-left: 0px !important;
+    }
+
+        .AppointmentTime select {
+            margin-top: 20px;
+        }
+
+    .Pickup {
+        margin-top: 25px;
+    }
+
+    .radio-list .radio-inline {
+        margin-left: 0px;
+    }
+
+        .radio-list .radio-inline label {
+            max-width: 100%;
+        }
+
+    span.selected-name {
+        min-width: 0px !important;
+    }
+}
+
+/* iPads (landscape) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+    /* Styles */
+    .mobile, .center, .zopim {
+        display: none !important;
+    }
+
+    .pc {
+        display: block;
+    }
+
+    .noo-clients {
+        padding-bottom: 25px;
+        padding-left: 75px !important;
+        padding-right: 35px !important;
+        padding-top: 50px;
+    }
+
+    .noo-clients-default-3 .noo-clients-default li {
+        width: 33.3333333%;
+    }
+
+    .noo-title {
+        width: 200px;
+    }
+
+        .noo-title strong {
+            width: 200px;
+        }
+
+    .noo-newsltter-form {
+        margin-bottom: 25px;
+    }
+
+        .noo-newsltter-form input[type="submit"] {
+            margin-top: 10px;
+            margin-left: 0px;
+        }
+
+        .noo-newsltter-form input[type="text"] {
+            width: 75%;
+        }
+
+        .noo-newsltter-form .mc-email {
+            max-width: 100%;
+        }
+
+    .login .content {
+        padding: 15px;
+        width: 300px;
+    }
+
+    .login-form .col-lg-1.pt-13.pl-0.pr-0 {
+        padding-top: 50px !important;
+        text-align: center;
+    }
+
+    .register-form label.Agreement {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* iPads (portrait) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+    .pc, .center, .zopim {
+        display: none !important;
+    }
+
+    .mobile {
+        display: block;
+    }
+
+    .noo-clients {
+        padding-bottom: 25px;
+        padding-left: 35px !important;
+        padding-right: 35px !important;
+        padding-top: 50px;
+    }
+
+    .noo-newsltter-form {
+        margin-bottom: 25px;
+    }
+
+        .noo-newsltter-form input[type="submit"] {
+            margin-top: 10px;
+            margin-left: 0px;
+        }
+
+        .noo-newsltter-form input[type="text"] {
+            width: 75%;
+        }
+
+        .noo-newsltter-form .mc-email {
+            max-width: 100%;
+        }
+
+    .login .content {
+        padding: 15px;
+        width: 300px;
+    }
+
+    .login-form .col-lg-1.pt-13.pl-0.pr-0 {
+        padding-top: 50px !important;
+        text-align: center;
+    }
+
+    .register-form label.Agreement {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* Desktops and laptops ----------- */
+@media only screen and (min-width : 1224px) {
+    /* Styles */
+    .mobile {
+        display: none !important;
+    }
+
+    .pc {
+        display: block;
+    }
+}
+
+/* Large screens ----------- */
+@media only screen and (min-width : 1824px) {
+    /* Styles */
+    .mobile {
+        display: none !important;
+    }
+
+    .pc {
+        display: block;
+    }
+}

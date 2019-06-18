@@ -8,16 +8,17 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
   
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="/stylesheets/style.css">
+    {{!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/style.css"> --}}
     <!-- w3 links -->
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    {{!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> --}}
 
     <!-- fontawesome CDN -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    {{!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> --}}
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    {{!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> --}}
+    <link href="/stylesheets/icon.css" rel="stylesheet">
+    <script src="/javascripts/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
  
      <script src="/javascripts/jquery.dataTables.min.js"></script>
     <script src="/javascripts/data-tables-script.js"></script>
@@ -31,7 +32,7 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
    
     <!-- google charts -->
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="/javascripts/loader.js"></script>
     <!-- /links.html -->    
         
 </head>
@@ -40,7 +41,7 @@
 </html>
 
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js">
+<script type="text/javascript" src="/javascripts/jspdf.debug.js">
     function print() {
         var pdf = new jsPDF('p', 'pt', 'letter');
         source = $('#content')[0];
@@ -321,7 +322,7 @@
     </div>
 </body>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js">
+<script type="text/javascript" src="/javascripts/jspdf.debug.js">
     function print() {
         var pdf = new jsPDF('p', 'pt', 'letter');
         source = $('#content')[0];

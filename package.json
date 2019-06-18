@@ -26,7 +26,6 @@
     "nodemailer": "^6.2.1",
     "nodemon": "^1.19.1",
     "pug-mailer": "^1.0.1",
-    "puppeteer": "^1.17.0",
     "shortid": "^2.2.14",
     "unique-number": "^2.0.1"
   }

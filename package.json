@@ -14,7 +14,7 @@
     "express": "~4.16.0",
     "express-session": "^1.16.1",
     "fs": "0.0.1-security",
-    "handlebars": "^4.1.2",
+    "handlebars": "^4.5.3",
     "hbs": "~4.0.1",
     "hbs-mailer": "^0.4.1",
     "http-errors": "~1.6.2",

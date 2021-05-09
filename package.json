@@ -20,7 +20,7 @@
     "http-errors": "~1.6.2",
     "http-msgs": "^1.0.9",
     "jspdf": "^1.5.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mongoose": "^5.5.11",
     "morgan": "~1.9.0",
     "nodemailer": "^6.2.1",
